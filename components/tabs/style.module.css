@@ -1,0 +1,7 @@
+.tabs {
+  max-width: 600px;
+}
+.active {
+  background: linear-gradient(72.28deg, #592ee1 22.43%, #b836d9 101.51%);
+  color: #fff;
+}
