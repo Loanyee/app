@@ -36,7 +36,7 @@ const Header = () => {
           </Link>
         )} */}
 
-        {!checkNewUser && <ConnectButton />}
+        <ConnectButton />
       </div>
     </header>
   );
