@@ -28,15 +28,15 @@ const Header = () => {
       </Link>
 
       <div className="flex flex-row gap-3 items-center">
-        {walletConnected && (
+        {/* {walletConnected && (
           <Link href="/borrow">
             <a className="text-lg hover:opacity-60 m-0 border-black border-2 text-black bg-white py-2 px-5 rounded-full">
               Become a Borrower
             </a>
           </Link>
-        )}
+        )} */}
 
-        {checkNewUser && <ConnectButton />}
+        {!checkNewUser && <ConnectButton />}
       </div>
     </header>
   );
