@@ -9,8 +9,8 @@ import { useAccount } from "wagmi";
 
 //React Hooks
 import { useEffect, useState } from "react";
-
-const Header = () => {
+import style from "../styles/Home.module.css";
+const Header = ({ updatedHeader }) => {
   const { isConnected } = useAccount();
   const [walletConnected, setWalletConnected] = useState();
   const [checkNewUser, setCheckNewUser] = useState();
@@ -20,7 +20,11 @@ const Header = () => {
   }, []);
 
   return (
-    <header className="flex justify-between align-middle py-6 px-8 ">
+    <header
+      className={`flex justify-between align-middle py-6 px-8 ${
+        updatedHeader ? style.header_bg : ""
+      }`}
+    >
       <Link href="/">
         <div className="items-center">
           <Image src={loanyeeLogo} width={200} height={40}></Image>

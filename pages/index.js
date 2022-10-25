@@ -68,7 +68,7 @@ export default function Home() {
 
   return (
     <div>
-      <div className="bg-white">
+      <div className="container mx-auto mt-16 mb-10 bg-white rounded-md shadow-lg py-10 px-16">
         <Tabs />
         {/* Banner */}
         {/* <div className="container mt-12 mx-auto">
@@ -84,7 +84,7 @@ export default function Home() {
       </div> */}
 
         {/* Categories */}
-        <div className="container mt-10 mx-auto py-5 grid grid-cols-9 justify-between text-xl text-stone-500 items-center">
+        <div className="mt-10  py-5 grid grid-cols-9 justify-between text-xl text-stone-500 items-center">
           <div className="col-span-2">Borrower</div>
           <div className="col-span-2">Loan Value</div>
           <div className="col-span-2">Duration</div>
