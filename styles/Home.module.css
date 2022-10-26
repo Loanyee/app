@@ -134,12 +134,10 @@
   position: absolute;
   top: 0px;
   left: 0px;
-  background: linear-gradient(
-    104.12deg,
-    rgba(234, 226, 254, 0.8) 32.02%,
-    rgba(219, 207, 253, 0.8) 63.41%
-  );
-  height: 350px;
+  background: url("../assets/header-bg.svg");
+  background-size:cover;
+  background-position:center center;
+  height: 300px;
   width: 100%;
   z-index: -1;
 }
