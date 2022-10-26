@@ -47,6 +47,8 @@ function MyApp({ Component, pageProps }) {
     }
   }, [router.asPath]);
 
+  // change something
+
   return (
     <>
       <WagmiConfig client={wagmiClient}>
