@@ -19,6 +19,7 @@
   border-top: 1px solid #eaeaea;
   justify-content: center;
   align-items: center;
+  position: relative;
 }
 
 .footer a {
@@ -126,4 +127,17 @@
   .logo img {
     filter: invert(1);
   }
+}
+
+.header_bg::after {
+  content: "";
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  background: url("../assets/header-bg.svg");
+  background-size:cover;
+  background-position:center center;
+  height: 300px;
+  width: 100%;
+  z-index: -1;
 }
