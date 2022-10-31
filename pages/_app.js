@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+
 import { useEffect, useState } from "react";
 import "../styles/globals.css";
 import { UserProvider } from "../context/useContext";

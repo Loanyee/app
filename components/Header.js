@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -27,7 +29,12 @@ const Header = ({ updatedHeader }) => {
     >
       <Link href="/">
         <div className="items-center">
-          <Image src={loanyeeLogo} width={200} height={40}></Image>
+          <Image
+            src={loanyeeLogo}
+            width={200}
+            height={40}
+            alt="Not found"
+          ></Image>
         </div>
       </Link>
 

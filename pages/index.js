@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+
 import Link from "next/link";
 import Image from "next/image";
 import loanyeeLogo from "../public/image/LoanyeeLogo.svg";
