@@ -18,6 +18,7 @@ import {
 import { chain, configureChains, createClient, WagmiConfig } from "wagmi";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
+import { PushChat } from '../components/Chat';
 
 const { chains, provider } = configureChains(
   [chain.goerli, chain.polygonMumbai, chain.optimismGoerli],
@@ -72,6 +73,7 @@ function MyApp({ Component, pageProps }) {
           <UserProvider>
             <Component {...pageProps} />
           </UserProvider>
+          <PushChat />
         </RainbowKitProvider>
       </WagmiConfig>
     </>
