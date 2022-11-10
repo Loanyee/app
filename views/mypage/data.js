@@ -1,4 +1,4 @@
-export const data = [
+export const loanData = [
   {
     lenderAddress: "0x32hf823thf9",
     currency: "USDC",
@@ -11,12 +11,45 @@ export const data = [
   },
   {
     lenderAddress: "0x32hf823thf9",
-    currency: "ETH",
+    currency: "USDT",
     value: "1ETH",
     maturity: "30 Days",
     contractAddress: "0x512v98fy836",
     startDate: "06/05/2022",
     APY: "10%",
     status: "Completed",
+  },
+];
+
+export const lendingsData = [
+  {
+    lenderAddress: "0x32hf823thf9",
+    currency: "USDC",
+    value: "10,000 USDC",
+    maturity: "4 Days",
+    contractAddress: "4",
+    startDate: "08/20/2022",
+    APY: "15%",
+    status: "Stopped",
+  },
+  {
+    lenderAddress: "0x32hf823thf9",
+    currency: "USDC",
+    value: "10,000 USD",
+    maturity: "4 Days",
+    contractAddress: "4",
+    startDate: "08/20/2022",
+    APY: "15%",
+    status: "Completed",
+  },
+  {
+    lenderAddress: "0x32hf823thf9",
+    currency: "USDC",
+    value: "10,000 USD",
+    maturity: "4 Days",
+    contractAddress: "4",
+    startDate: "08/20/2022",
+    APY: "15%",
+    status: "Active",
   },
 ];

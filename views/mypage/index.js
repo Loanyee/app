@@ -1,56 +1,16 @@
-import Jazzicon, { jsNumberForAddress } from "react-jazzicon"; //Randomly generated profiles
+import Jazzicon, { jsNumberForAddress } from "react-jazzicon";
 import Redirect from "../../components/utilityLogos/redirect";
-// const { Framework } = require("@superfluid-finance/sdk-core")
-
-import Link from "next/link";
-
-import { useContext, useEffect, useState } from "react";
-import { UserContext } from "../../context/useContext";
+import { loanData, lendingsData } from "./data";
 import { useRouter } from "next/router";
-import {
-  useContractRead,
-  useContractWrite,
-  usePrepareContractWrite,
-  useAccount,
-  useSigner,
-} from "wagmi";
+import { useContractRead } from "wagmi";
 
-import dataSet from "../../data/loanHistoryList.js";
 import LoanHistorySection from "../../components/loanDetail/loanHistorySection";
-
-import USDC from "../../components/cryptologos/usdc";
-import DAI from "../../components/cryptologos/dai";
-
-// import employmentLoanABI from "../data/contractABI/EmploymentLoan.json"
-import { writeContract } from "@wagmi/core";
 import { loanFactoryABI } from "../../data/contractABI/LoanFactory";
-import { employmentLoanABI } from "../../data/contractABI/employmentLoan";
-import { erc20ABI } from "../../data/contractABI/erc20TokenABI";
-//Helper Functions
 
 export default function BorrowerDetail() {
-  function shortenAddress(str) {
-    return str.substring(0, 5) + "..." + str.substring(str.length - 3);
-  }
-
-  //Router for passing data between pages
   const router = useRouter();
   const borrowerData = router.query;
-  const borrowAmountInEther = (
-    borrowerData.borrowAmount / Math.pow(10, 18)
-  ).toFixed(0);
-  const returnAmountInEther =
-    borrowAmountInEther *
-    (1 + (borrowerData.interestRate / 100) * (borrowerData.paybackMonths / 12));
 
-  const { user, setUser } = useContext(UserContext);
-
-  const [loanContractAddress, setLoanContractAddress] = useState("0x0000");
-
-  //Get lender address
-  const { address: lenderAddress } = useAccount();
-
-  //Get loanContract Address
   const { data: employmentLoanAddress } = useContractRead({
     addressOrName: "0xFB26b9144f13e7D2485C4df2cCbb977660DC01fc",
     contractInterface: loanFactoryABI,
@@ -61,58 +21,10 @@ export default function BorrowerDetail() {
     },
   });
 
-  //get borrow amount
-  const { data: borrowAmount } = useContractRead({
-    addressOrName: loanContractAddress,
-    contractInterface: employmentLoanABI,
-    functionName: "borrowAmount",
-    onSuccess(data) {
-      console.log("Borrow amount is ", borrowerData.borrowAmount);
-    },
-  });
-
-  //Get DAI Token contract for lender to call approve()
-  const { config: approveERC20Config } = usePrepareContractWrite({
-    addressOrName: "0xF2d68898557cCb2Cf4C10c3Ef2B034b2a69DAD00",
-    contractInterface: erc20ABI,
-    functionName: "approve",
-    args: [loanContractAddress, borrowAmount + 25],
-  });
-
-  const {
-    write: approveERC20,
-    data,
-    isSuccess,
-  } = useContractWrite(approveERC20Config);
-
-  //Prepare Lend Function
-  const { config: lendToBorrowerConfig, error } = usePrepareContractWrite({
-    addressOrName: employmentLoanAddress,
-    contractInterface: employmentLoanABI,
-    functionName: "lend",
-  });
-
-  console.log("logging error ", error);
-
-  const {
-    write: createNewLoan,
-    data: lendData,
-    isSuccess: lendSuccess,
-  } = useContractWrite(lendToBorrowerConfig);
-  console.log("logging errors", lendData, lendSuccess);
-
-  //Link for etherscan
   const etherscanBorrowerAddress =
     "https://etherscan.io/address/" + borrowerData.borrower;
   const etherscanContractAddress =
     "https://etherscan.io/address/" + employmentLoanAddress;
-
-  function approve() {
-    approveERC20();
-  }
-  function lend() {
-    createNewLoan();
-  }
 
   return (
     <div>
@@ -182,9 +94,40 @@ export default function BorrowerDetail() {
               <div className="col-span-1">Status</div>
             </div>
             <div>
-              {dataSet.map((borrower, index) => {
+              {loanData.map((borrower, index) => {
                 return (
-                  <LoanHistorySection key={4} index={index} data={borrower} />
+                  <LoanHistorySection
+                    key={4}
+                    index={index}
+                    data={borrower}
+                    myPage={true}
+                  />
+                );
+              })}
+            </div>
+          </div>
+          <div>
+            <div className="flex justify-between items-center mb-5">
+              <h1 className="font-medium text-xl">Lendings</h1>
+            </div>
+            <div className="py-5 pt-2 text-stone-500 grid grid-cols-13 grid-flow-row justify-between text-xl items-center">
+              <div className="col-span-3">Borrower</div>
+              <div className="col-span-2">Value</div>
+              <div className="col-span-2">Maturity</div>
+              <div className="col-span-2">Credit Score</div>
+              <div className="col-span-2">Started Date</div>
+              <div className="col-span-1">ARP</div>
+              <div className="col-span-1">Status</div>
+            </div>
+            <div>
+              {lendingsData.map((borrower, index) => {
+                return (
+                  <LoanHistorySection
+                    key={4}
+                    index={index}
+                    data={borrower}
+                    myPage={true}
+                  />
                 );
               })}
             </div>
