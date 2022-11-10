@@ -9,6 +9,8 @@ import Header from "../components/Header";
 import { useRouter } from "next/router";
 import tabIcon from "../public/favicon.ico";
 import "@rainbow-me/rainbowkit/styles.css";
+import dynamic from "next/dynamic";
+
 import {
   getDefaultWallets,
   RainbowKitProvider,
@@ -18,7 +20,9 @@ import {
 import { chain, configureChains, createClient, WagmiConfig } from "wagmi";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
-import { PushChat } from '../components/Chat';
+const PushChat = dynamic(() => import("../components/chat"), {
+  ssr: false,
+});
 
 const { chains, provider } = configureChains(
   [chain.goerli, chain.polygonMumbai, chain.optimismGoerli],
