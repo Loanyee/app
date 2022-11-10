@@ -42,7 +42,12 @@ function MyApp({ Component, pageProps }) {
 
   useEffect(() => {
     const path = router.pathname;
-    if (path == "/" || path == "/borrow" || path == "/borrowerDetail") {
+    if (
+      path == "/" ||
+      path == "/borrow" ||
+      path == "/borrowerDetail" ||
+      path == "/mypage"
+    ) {
       setUpdatedHeader(true);
     } else {
       setUpdatedHeader(false);
