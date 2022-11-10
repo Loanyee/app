@@ -16,9 +16,11 @@ const Header = ({ updatedHeader }) => {
   const { isConnected } = useAccount();
   const [walletConnected, setWalletConnected] = useState();
   const [checkNewUser, setCheckNewUser] = useState();
+  const [isMypage, setIsMypage] = useState();
   useEffect(() => {
     setWalletConnected(isConnected);
     setCheckNewUser(localStorage.getItem("joinas"));
+    setIsMypage(localStorage.getItem("wagmi.connected"));
   }, []);
 
   return (
@@ -46,6 +48,13 @@ const Header = ({ updatedHeader }) => {
             </a>
           </Link>
         )} */}
+        {isMypage && (
+          <Link href="/mypage">
+            <a className="text-lg hover:opacity-60 m-0 border-black border-2 text-black bg-white py-2 px-5 rounded-full">
+              Mypage
+            </a>
+          </Link>
+        )}
 
         <ConnectButton />
       </div>
