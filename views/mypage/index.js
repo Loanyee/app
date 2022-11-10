@@ -146,89 +146,16 @@ export default function BorrowerDetail() {
               <div className="flex flex-col  gap-3 shrink bg-[#F5F9FF] rounded-md p-5 w-full">
                 <div className="flex gap-10 justify-items-center items-center  ">
                   <div className="flex flex-col gap-2 self-center">
-                    <h1 className="text-gray-500">Loan History</h1>
-                    <p className="text-lg">100% Repayment</p>
+                    <h1 className="text-gray-500 font-medium	">Loan History</h1>
+                    <p className="text-lg font-semibold	">100% Repayment</p>
                   </div>
                   <div className=" divide-x divide-solid divide-gray-900"></div>
                   <div className="flex flex-col gap-2">
-                    <h1 className="text-gray-500">Salary History</h1>
-                    <p className="text-lg">$5,000 for 3 months</p>
+                    <h1 className="text-gray-500 font-medium	">
+                      Salary History
+                    </h1>
+                    <p className="text-lg font-semibold	">$5,000 for 3 months</p>
                   </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Loan Detail */}
-
-          <div className="grid grid-rows-2 flex-col border-2 divide-y divide-solid divide-gray-200 px-5 py-3 w-4/12 border-grey-200 rounded-md">
-            <div className="grid grid-cols-3 justify-between pb-2">
-              <div className="flex col-span-1 flex-col">
-                <p className="text-md text-gray-500">Loan Value</p>
-                <div className="flex gap-2">
-                  <DAI width={"2rem"}></DAI>{" "}
-                  <p className="text-2xl font-medium">{borrowAmountInEther}</p>
-                </div>
-              </div>
-              <div className="flex col-span-1 flex-col">
-                <p className="text-sm text-gray-500">Loan Duration</p>
-                <p className="text-xl font-medium">
-                  {borrowerData.paybackMonths} Months
-                </p>
-              </div>
-              <div className="flex col-span-1 flex-col ">
-                <p className="text-md text-gray-500 mr-5">APY</p>
-                <p className="text-2xl font-medium">
-                  {borrowerData.interestRate}%
-                </p>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-3 justify-around pt-2 pr-6">
-              <div className="flex flex-col col-span-1">
-                <p className="text-sm text-gray-500">Return Amount</p>
-                <div className="flex gap-2">
-                  <DAI width={"2rem"}></DAI>{" "}
-                  <p className="text-xl font-medium">{returnAmountInEther}</p>
-                </div>
-              </div>
-
-              <div className="flex flex-col col-span-1">
-                <p className="text-sm text-gray-500">Contract Address</p>
-                <div className="flex gap-2 items-center">
-                  <p className="text-xl font-medium">
-                    {shortenAddress(`${employmentLoanAddress}`)}
-                  </p>
-                  <a
-                    target="_blank"
-                    rel="noreferrer"
-                    href={etherscanContractAddress}
-                  >
-                    <Redirect width="1.2rem" />
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Borrower Summary */}
-          <div className="flex flex-col gap-2">
-            <h1 className="font-medium text-xl">Borrower Summary</h1>
-
-            <div className="flex flex-col  gap-3 shrink w-4/12 bg-[#F5F9FF] rounded-md p-5">
-              <div className="flex gap-10 justify-items-center items-center  ">
-                <div className="flex flex-col gap-2 self-center">
-                  <h1 className="text-gray-500">Credit Score</h1>
-                  <p className="text-lg">5</p>
-                </div>
-                <div className=" divide-x divide-solid divide-gray-900"></div>
-                <div className="flex flex-col gap-2">
-                  <h1 className="text-gray-500">Loan History</h1>
-                  <p className="text-lg">100% Repayment</p>
-                </div>
-                <div className="flex flex-col gap-2">
-                  <h1 className="text-gray-500">Salary History</h1>
-                  <p className="text-lg">3 months</p>
                 </div>
               </div>
             </div>
@@ -236,16 +163,22 @@ export default function BorrowerDetail() {
 
           {/* Loan History */}
           <div>
-            <h1 className="font-medium text-xl">Loan History</h1>
-            {/* py-5 pt-0 grid grid-cols-13 grid-flow-row justify-between text-xl items-center hover:opacity-70 hover:cursor-pointer */}
-            {/* container py-5 grid grid-cols-13 justify-between text-xl text-stone-500 items-center border-2 border-black */}
+            <div className="flex justify-between items-center mb-5">
+              <h1 className="font-medium text-xl">Loans</h1>
+              <div>
+                <button className="rounded-full border-2 border-black	px-5 py-2 text-lg font-semibold">
+                  Create a new loan
+                </button>
+              </div>
+            </div>
+
             <div className="py-5 pt-2 text-stone-500 grid grid-cols-13 grid-flow-row justify-between text-xl items-center">
               <div className="col-span-3">Lender</div>
               <div className="col-span-2">Value</div>
               <div className="col-span-2">Maturity</div>
               <div className="col-span-2">Contract Address</div>
-              <div className="col-span-2">Start Date</div>
-              <div className="col-span-1">APR</div>
+              <div className="col-span-2">Started Date</div>
+              <div className="col-span-1">Interest</div>
               <div className="col-span-1">Status</div>
             </div>
             <div>
