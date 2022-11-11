@@ -1,56 +1,76 @@
-import Jazzicon, { jsNumberForAddress } from 'react-jazzicon' //Randomly generated profiles
-import USDC from "../../components/cryptologos/usdc" //USDC svg component
-import ETH from "../../components/cryptologos/eth.js" //ETH svg component
-import DAI from "../../components/cryptologos/dai.js"
-import USDT from "../../components/cryptologos/usdt.js" 
+import Jazzicon, { jsNumberForAddress } from "react-jazzicon"; //Randomly generated profiles
+import USDC from "../../components/cryptologos/usdc"; //USDC svg component
+import ETH from "../../components/cryptologos/eth.js"; //ETH svg component
+import DAI from "../../components/cryptologos/dai.js";
+import USDT from "../../components/cryptologos/usdt.js";
 
+export default function LoanHistorySection({ index, data, myPage }) {
+  let borrowerProfileCSS;
+  if (index == 0) {
+    borrowerProfileCSS =
+      "py-5 pt-0 grid grid-cols-13 grid-flow-row justify-between text-xl items-center hover:opacity-70 hover:cursor-pointer";
+  } else {
+    borrowerProfileCSS =
+      "py-5 border-t-2 grid grid-cols-13 grid-flow-row justify-between text-xl items-center hover:opacity-70 hover:cursor-pointer";
+  }
 
-export default function LoanHistorySection({index, data}){
-    let borrowerProfileCSS;
-    if(index==0){
-        borrowerProfileCSS = "py-5 pt-0 grid grid-cols-13 grid-flow-row justify-between text-xl items-center hover:opacity-70 hover:cursor-pointer"
-    }else{
-        borrowerProfileCSS = "py-5 border-t-2 grid grid-cols-13 grid-flow-row justify-between text-xl items-center hover:opacity-70 hover:cursor-pointer"
+  //This is for shortening an address for easy display
+  const shortenAddress = (str) => {
+    return str.substring(0, 5) + "..." + str.substring(str.length - 3);
+  };
 
+  const getClassName = () => {
+    let color;
+    switch (data.status) {
+      case "Not Active":
+        color = "text-yellow-500";
+        break;
+      case "Completed":
+        color = "text-blue-500";
+        break;
+      case "Stopped":
+        color = "text-red-500";
+        break;
+      case "Active":
+        color = "text-green-500";
+        break;
     }
+    return color;
+  };
 
-    //This is for shortening an address for easy display
-    const shortenAddress = (str) => {
-        return str.substring(0, 5) + "..." + str.substring(str.length - 3);
-    };
-
-    return(
-        <div className={borrowerProfileCSS}>
-        {/* Account profile and address */}
-        <div className="flex gap-5 col-span-3  items-center ">
+  return (
+    <div className={borrowerProfileCSS}>
+      {/* Account profile and address */}
+      <div className="flex gap-5 col-span-3  items-center ">
         <Jazzicon diameter={50} seed={jsNumberForAddress(data.lenderAddress)} />
-            {shortenAddress(data.lenderAddress)}
-        </div>
+        {shortenAddress(data.lenderAddress)}
+      </div>
 
-        {/* Currency and Amount */}
-        <div className="flex gap-2 col-span-2 items-center">
-            {data.currency=="USDC" && 
-            <USDC width="2rem"></USDC>}
-            {data.currency=="USDT" &&
-            <USDT width="2rem"></USDT>}
-            {data.currency=="DAI" &&
-            <DAI width="2rem"></DAI>}
-        
-            
-            {data.value} 
-        </div>
-        {/* Loan Maturity, Credit Score, Salary History, and APR */}
-        <div className="col-span-2">{data.maturity}</div>
-        <div className="col-span-2">{shortenAddress(data.contractAddress)}</div>
-        <div className="col-span-2">{data.startDate}</div>
-        <div className="col-span-1">{data.APY}</div>
+      {/* Currency and Amount */}
+      <div className="flex gap-2 col-span-2 items-center">
+        {data.currency == "USDC" && <USDC width="2rem"></USDC>}
+        {data.currency == "USDT" && <USDT width="2rem"></USDT>}
+        {data.currency == "DAI" && <DAI width="2rem"></DAI>}
 
-        {/* Status Indicator */}
-        <div className="flex gap-2 items-center col-span-1" >
+        {data.value}
+      </div>
+      {/* Loan Maturity, Credit Score, Salary History, and APR */}
+      <div className="col-span-2">{data.maturity}</div>
+      <div className="col-span-2">{shortenAddress(data.contractAddress)}</div>
+      <div className="col-span-2">{data.startDate}</div>
+      <div className="col-span-1">{data.APY}</div>
 
-            {data.status > 50 && <div className="w-5 h-5 rounded-full bg-green-400"/>} {data.status}
-        </div>
+      {/* Status Indicator */}
+      <div className="flex gap-2 items-center col-span-1">
+        {data.status > 50 && (
+          <div className="w-5 h-5 rounded-full bg-green-400" />
+        )}{" "}
+        {myPage ? (
+          <span className={getClassName()}>{data.status}</span>
+        ) : (
+          data.status
+        )}
+      </div>
     </div>
-
-    )
+  );
 }

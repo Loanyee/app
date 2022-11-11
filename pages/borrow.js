@@ -139,7 +139,7 @@ export default function Borrow() {
 
   return (
     <>
-      <div className="container mx-auto max-w-2xl  mt-16 mb-10 bg-white rounded-md shadow-lg py-10 px-16">
+      <div className="container mx-auto max-w-3xl  mt-16 mb-10 bg-white rounded-md shadow-lg py-10 px-16">
         <Tabs />
         <header className=" flex flex-row justify-center items-center text-center align-middle gap-5">
           <div className="flex flex-row items-center gap-3">

@@ -18,6 +18,7 @@ import {
 import { chain, configureChains, createClient, WagmiConfig } from "wagmi";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
+import dynamic from "next/dynamic";
 
 const { chains, provider } = configureChains(
   [chain.goerli, chain.polygonMumbai, chain.optimismGoerli],
@@ -26,6 +27,9 @@ const { chains, provider } = configureChains(
 const { connectors } = getDefaultWallets({
   appName: "My RainbowKit App",
   chains,
+});
+const PushChat = dynamic(() => import("../components/chat"), {
+  ssr: false,
 });
 
 const wagmiClient = createClient({
@@ -42,7 +46,12 @@ function MyApp({ Component, pageProps }) {
 
   useEffect(() => {
     const path = router.pathname;
-    if (path == "/" || path == "/borrow" || path == "/borrowerDetail") {
+    if (
+      path == "/" ||
+      path == "/borrow" ||
+      path == "/borrowerDetail" ||
+      path == "/mypage"
+    ) {
       setUpdatedHeader(true);
     } else {
       setUpdatedHeader(false);
@@ -72,6 +81,7 @@ function MyApp({ Component, pageProps }) {
           <UserProvider>
             <Component {...pageProps} />
           </UserProvider>
+          <PushChat />
         </RainbowKitProvider>
       </WagmiConfig>
     </>
