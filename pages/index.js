@@ -11,7 +11,10 @@ import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../context/useContext";
 import Tabs from "../components/tabs";
 import dataSet from "../data/borrowerList";
-
+import { useQuery } from "@apollo/client";
+import { GET_STREAM_DETAILS } from "../queries/getStream";
+import { GET_TIME } from "../utils/date";
+import moment from "moment/moment";
 //API Calls
 const axios = require("axios");
 
@@ -22,6 +25,24 @@ export default function Home() {
   const [loanData, setLoanData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isNewUser, setIsNewUser] = useState(false);
+  const [difference, setDifference] = useState("");
+
+  // TYPE 0
+
+  const senderAddress = "0x54DC214722bB592e0f46a9a4a724Eb464AeA6b62";
+  const receiverAddress = "0x6f40B3E8000693929464D14AB05f38037F8EDff2";
+
+  // TYPE 0 2
+  // const senderAddress = "0x02b5525Fd3bd29dBFaE8f8e453FE3B7e85D7D470";
+  // const receiverAddress = "0x237CE8AbaED724970C17Afd1ff82B191CC3759Bc";
+
+  const { loading, error, data } = useQuery(GET_STREAM_DETAILS, {
+    variables: {
+      sender: senderAddress.toLocaleLowerCase(),
+      receiver: receiverAddress.toLocaleLowerCase(),
+    },
+  });
+
   async function fetchLoans() {
     const getLoanHistory = async () => {
       const loanHistory = await axios.post(
@@ -67,11 +88,31 @@ export default function Home() {
   useEffect(() => {
     fetchLoans();
   }, []);
+  useEffect(() => {
+    console.log("dataStream", data?.flowUpdatedEvents);
+    if (data) {
+      const flowUpdatedEvents = data.flowUpdatedEvents;
+      // case 1
+      // const stapm_1 = flowUpdatedEvents[0].timestamp;
+      // const stamp_2 = flowUpdatedEvents[1].timestamp;
+      // const time = GET_TIME(stapm_1, stamp_2);
+
+      // case 2
+      const stapm_0 = flowUpdatedEvents[0].timestamp;
+      const time = GET_TIME(stapm_0, moment().unix());
+
+      setDifference(time);
+    }
+  }, [data]);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Something Went Wrong</p>;
 
   return (
     <div>
       <div className="container mx-auto mt-16 mb-10 bg-white rounded-md shadow-lg py-10 px-16">
         <Tabs />
+        <h1 className="font-xl">{difference} </h1>
         {/* Banner */}
         {/* <div className="container mt-12 mx-auto">
                 <Image className="w-12" src={banner}></Image>
