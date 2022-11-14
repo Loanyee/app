@@ -135,9 +135,26 @@
   top: 0px;
   left: 0px;
   background: url("../assets/header-bg.svg");
-  background-size:cover;
-  background-position:center center;
+  background-size: cover;
+  background-position: center center;
   height: 300px;
   width: 100%;
   z-index: -1;
+}
+
+.mypageBtn {
+  color: #25292e;
+  border: 1px solid #fff;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  background: #fff;
+  border-radius: 12px;
+  font-weight: 700;
+  height: 40px;
+  min-width: 115px;
+  display: grid;
+  place-items: center;
+  transition: 0.125s ease;
+}
+.mypageBtn:hover {
+  transform: scale(1.025);
 }

@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import loanyeeLogo from "../public/image/LoanyeeLogo.svg";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
+import Router from "next/router";
 
 //wallet connect
 import { useAccount } from "wagmi";
@@ -20,7 +21,7 @@ const Header = ({ updatedHeader }) => {
   useEffect(() => {
     setWalletConnected(isConnected);
     setCheckNewUser(localStorage.getItem("joinas"));
-    setIsMypage(localStorage.getItem("wagmi.connected"));
+    setIsMypage(true);
   }, []);
 
   return (
@@ -41,11 +42,9 @@ const Header = ({ updatedHeader }) => {
       </Link>
 
       <div className="flex flex-row gap-3 items-center">
-        {isConnected && (
+        {isConnected && isMypage && (
           <Link href="/mypage">
-            <a className="text-lg hover:opacity-60 m-0 font-medium border-black border-2 text-black bg-white py-1 px-5 rounded-lg">
-              Mypage
-            </a>
+            <a className={style.mypageBtn}>Mypage</a>
           </Link>
         )}
 
