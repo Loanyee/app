@@ -14,23 +14,18 @@ export default function SetupLoan({
   setFunctions,
   formState,
   APY,
+  noActiveStream,
+  setNoActiveStream,
   creditScore,
 }) {
   const [openMenuCurrency, setOpenMenuCurrency] = useState(false);
   const [calculatedStream, setCalculatedStream] = useState([]);
-  const [employerAddress, setEmployerAddress] = useState("");
+  const [streamData, setStreamData] = useState([]);
   const [addressValidator, setAddressValidator] = useState(false);
-  const [noActiveStream, setNoActiveStream] = useState(false);
+  const [isBtnDisable, setIsBtnDisable] = useState(true);
   const { address } = useAccount();
 
-  // sender
-  // 0x54DC214722bB592e0f46a9a4a724Eb464AeA6b62
-
-  // Receiver
-  // 0xaD26A4E7ef85EDccD48451B64029B8082ffDeF18
-  // const senderAddress = "0x54DC214722bB592e0f46a9a4a724Eb464AeA6b62";
-  // const receiverAddress = "0xaD26A4E7ef85EDccD48451B64029B8082ffDeF18";
-  const senderAddress = employerAddress;
+  const senderAddress = formState.employerAddress;
   const receiverAddress = address;
 
   const [getStream, { loading, data }] = useLazyQuery(GET_STREAM_DETAILS);
@@ -66,7 +61,16 @@ export default function SetupLoan({
   const formatMonthlyAmount = (number) => {
     return Math.round((number / 10 ** 18) * 60 * 60 * 24 * 30);
   };
+  const getRepayment = () => {
+    const duration = formState.loanDurationType === "Month" ? 12 : 365;
 
+    const repayment =
+      Number(formState.borrowAmount) +
+      (Number(formState.borrowAmount) * 8 * Number(formState.loanDuration)) /
+        duration;
+
+    return repayment.toFixed(2);
+  };
   const calculatedTotalAmount = (
     streamedUntilUpdatedAt,
     updatedAtTimestamp,
@@ -86,7 +90,7 @@ export default function SetupLoan({
   };
 
   const getData = () => {
-    const isAddressCorrect = validateInputAddresses(employerAddress);
+    const isAddressCorrect = validateInputAddresses(formState.employerAddress);
     if (isAddressCorrect) {
       getStream({
         variables: {
@@ -98,26 +102,30 @@ export default function SetupLoan({
     }
   };
   const handleInputChange = (e) => {
+    setStreamData([]);
+    setCalculatedStream([]);
     const { value } = e.target;
-    setEmployerAddress(value);
+    setFunctions.setEmployerAddress(value);
     const isAddressCorrect = validateInputAddresses(value);
     if (isAddressCorrect) {
+      setIsBtnDisable(false);
       setAddressValidator(false);
     } else {
+      setFunctions.setIsBtnDisable(true);
+      setIsBtnDisable(true);
       setAddressValidator(true);
     }
   };
 
   useEffect(() => {
-    if (data) {
-      const streamsData = data.streams;
-
-      const filterStreamData = streamsData.filter(
+    if (streamData.length > 0) {
+      const filterStreamData = streamData?.filter(
         (stream) => stream.currentFlowRate != 0
       );
       const streams = [];
 
-      if (filterStreamData.length === 0) {
+      if (filterStreamData.length === 0 || streamData.length === 0) {
+        setFunctions.setIsBtnDisable(true);
         setNoActiveStream(true);
       } else {
         setNoActiveStream(false);
@@ -137,9 +145,16 @@ export default function SetupLoan({
           streams.push(currentStream);
         });
         setCalculatedStream(streams);
+        setFunctions.setIsBtnDisable(false);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [streamData]);
+
+  useEffect(() => {
+    if (data) {
+      setStreamData(data.streams);
+    }
   }, [data]);
 
   return (
@@ -156,10 +171,11 @@ export default function SetupLoan({
           You need to have active stream to create a loan
         </h2>
       </div>
+      <h2 className="text-gray-500 text-lg font-bold mt-3">Salary history</h2>
       <div className="mb-2 mt-4 flex items-center gap-5">
         <div className="flex-1">
           <label
-            className="block text-gray-700 text-sm font-bold mb-2"
+            className="block text-gray-600 text-sm font-bold mb-2"
             htmlFor="employer_address"
           >
             Employer Address
@@ -172,14 +188,15 @@ export default function SetupLoan({
             type="text"
             placeholder="0xor...238m"
             onChange={(e) => handleInputChange(e)}
+            value={formState.employerAddress}
           />
         </div>
 
         <div>
           <button
-            className="rounded-full border-2 border-black px-3 py-3 w-32	h-14	mt-7 disabled:cursor-not-allowed"
+            className="rounded-full border-2 border-black px-3 py-3 w-32	h-14	mt-7 disabled:cursor-not-allowed disabled:opacity-50"
             onClick={() => getData()}
-            disabled={addressValidator}
+            disabled={isBtnDisable}
           >
             Search
           </button>
@@ -249,9 +266,12 @@ export default function SetupLoan({
           );
         })
       )}
+      <h2 className="text-gray-600 text-lg font-bold mt-3">Loan Detail</h2>
       <div className="bt-5 flex flex-col gap-5 mt-5">
         <div className="flex flex-col gap-2">
-          <h2 className="text-lg font-semibold">Borrow Amount</h2>
+          <h2 className="block text-gray-600 text-sm font-bold">
+            Borrow Amount
+          </h2>
           <div className="grid grid-cols-5 border-2 px-5 rounded-md text-lg w-full p-3 border-gray-200">
             <input
               style={{ outline: "none" }}
@@ -340,7 +360,9 @@ export default function SetupLoan({
         </div>
 
         <div className="flex flex-col gap-2">
-          <h2 className="text-lg font-semibold">Loan Duration</h2>
+          <h2 className="block text-gray-600 text-sm font-bold">
+            Loan Duration
+          </h2>
           <div className="grid grid-cols-5 border-2 px-5 rounded-md text-lg w-full p-3 border-gray-200">
             <input
               style={{ outline: "none" }}
@@ -406,36 +428,23 @@ export default function SetupLoan({
                     >
                       Month
                     </button>
-                    <button
-                      onClick={handleDuration}
-                      className="flex items-center gap-2 text-gray-700 px-4 py-2 text-sm"
-                      role="menuitem"
-                      tabIndex="-1"
-                      id="Year"
-                    >
-                      Year
-                    </button>
                   </div>
                 </div>
               )}
             </div>
           </div>
+          {formState.loanDuration && formState.borrowAmount && (
+            <div className="flex flex-row mt-5 bg-slate-200 rounded-md p-3  gap-1">
+              <h2 className="ml-3 text-gray-500 text-md font-normal">
+                Total repayment will be{" "}
+                <span className="text-gray-600 font-bold">
+                  ${getRepayment()}
+                </span>
+              </h2>
+            </div>
+          )}
         </div>
 
-        <div className="flex flex-col gap-2">
-          <h2 className="text-lg font-semibold">Employer Address</h2>
-          <div className="grid grid-cols-5 border-2 px-5 rounded-md text-lg w-full p-3 border-gray-200">
-            <input
-              style={{ outline: "none" }}
-              placeholder="0x..."
-              value={formState.employerAddress}
-              onChange={(event) =>
-                setFunctions.setEmployerAddress(event.target.value)
-              }
-              className="col-span-4"
-            ></input>
-          </div>
-        </div>
         {formState.formIsEmpty && (
           <div className="flex flex-row items-center mt-5 bg-slate-200 rounded-md p-3  gap-1">
             <div className="w-4 h-4 rounded-full bg-red-400 ml-3" />
