@@ -144,8 +144,18 @@ export default function SetupLoan({
 
   return (
     <div className="max-h-100">
-      <h1 className="flex  mt-8 font-bold text-2xl">Setup Loan 🔧</h1>
-
+      <div className="flex flex-row mt-8 bg-slate-200 rounded-md p-3  gap-1">
+        💡
+        <h2 className="ml-3 text-gray-500 text-md font-normal">
+          Current Interest Rate: <b>{APY * 100}%</b>
+        </h2>
+      </div>
+      <h1 className="flex  mt-4 font-bold text-2xl">Setup Loan 🔧</h1>
+      <div className="flex flex-row mt-5 bg-slate-200 rounded-md p-3  gap-1">
+        <h2 className="ml-3 text-gray-500 text-md font-normal">
+          You need to have active stream to create a loan
+        </h2>
+      </div>
       <div className="mb-2 mt-4 flex items-center gap-5">
         <div className="flex-1">
           <label
@@ -174,7 +184,7 @@ export default function SetupLoan({
             Search
           </button>
         </div>
-      </div>
+      </div>{" "}
       {addressValidator && (
         <div className="text-red-500">Please enter valid address</div>
       )}
@@ -239,14 +249,6 @@ export default function SetupLoan({
           );
         })
       )}
-
-      <div className="flex flex-row mt-5 bg-slate-200 rounded-md p-3  gap-1">
-        💡
-        <h2 className="ml-3 text-gray-500 text-md font-normal">
-          Current Interest Rate: <b>{APY * 100}%</b>
-        </h2>
-      </div>
-
       <div className="bt-5 flex flex-col gap-5 mt-5">
         <div className="flex flex-col gap-2">
           <h2 className="text-lg font-semibold">Borrow Amount</h2>
