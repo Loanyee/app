@@ -4,72 +4,12 @@ import USDC from "../cryptologos/usdc.js"; //USDC svg component
 import ETH from "../cryptologos/eth.js"; //ETH svg component
 import DAI from "../cryptologos/dai.js";
 import USDT from "../cryptologos/usdt.js";
+import TUSD from "../cryptologos/tusd";
 import { GET_STREAM_DETAILS } from "../../queries/getStream";
 import { GET_TIME } from "../../utils/date";
 import { useLazyQuery } from "@apollo/client";
 import moment from "moment/moment.js";
 import { useAccount } from "wagmi";
-
-const mockupData = [
-  {
-    __typename: "Stream",
-    id: "0x54dc214722bb592e0f46a9a4a724eb464aea6b62-0x6f40b3e8000693929464d14ab05f38037f8edff2-0xf2d68898557ccb2cf4c10c3ef2b034b2a69dad00-0.0",
-    currentFlowRate: "33333333333222",
-    createdAtTimestamp: "1668429048",
-    updatedAtTimestamp: "1668429048",
-    token: {
-      __typename: "Token",
-      id: "0xf2d68898557ccb2cf4c10c3ef2b034b2a69dad00",
-      name: "Super fDAI Fake Token",
-      symbol: "fDAIx",
-    },
-    streamPeriods: [
-      {
-        __typename: "StreamPeriod",
-        id: "0x54dc214722bb592e0f46a9a4a724eb464aea6b62-0x6f40b3e8000693929464d14ab05f38037f8edff2-0xf2d68898557ccb2cf4c10c3ef2b034b2a69dad00-0.0-0.0",
-      },
-    ],
-  },
-  {
-    __typename: "Stream",
-    id: "0x54dc214722bb592e0f46a9a4a724eb464aea6b62-0x6f40b3e8000693929464d14ab05f38037f8edff2-0xf2d68898557ccb2cf4c10c3ef2b034b2a69dad00-0.0",
-    currentFlowRate: "99999999999999",
-    createdAtTimestamp: "1664796413",
-    updatedAtTimestamp: "1668429048",
-    token: {
-      __typename: "Token",
-      id: "0xf2d68898557ccb2cf4c10c3ef2b034b2a69dad00",
-      name: "Super fDAI Fake Token",
-      symbol: "fDAIx",
-    },
-    streamPeriods: [
-      {
-        __typename: "StreamPeriod",
-        id: "0x54dc214722bb592e0f46a9a4a724eb464aea6b62-0x6f40b3e8000693929464d14ab05f38037f8edff2-0xf2d68898557ccb2cf4c10c3ef2b034b2a69dad00-0.0-0.0",
-      },
-    ],
-  },
-  {
-    __typename: "Stream",
-    id: "0x54dc214722bb592e0f46a9a4a724eb464aea6b62-0x6f40b3e8000693929464d14ab05f38037f8edff2-0xf2d68898557ccb2cf4c10c3ef2b034b2a69dad00-0.0",
-    currentFlowRate: "99999999999999",
-    createdAtTimestamp: "1663241213",
-    updatedAtTimestamp: "1668429048",
-    token: {
-      __typename: "Token",
-      id: "0xf2d68898557ccb2cf4c10c3ef2b034b2a69dad00",
-      name: "Super fDAI Fake Token",
-      symbol: "fDAIx",
-    },
-    streamPeriods: [
-      {
-        __typename: "StreamPeriod",
-        id: "0x54dc214722bb592e0f46a9a4a724eb464aea6b62-0x6f40b3e8000693929464d14ab05f38037f8edff2-0xf2d68898557ccb2cf4c10c3ef2b034b2a69dad00-0.0-0.0",
-      },
-    ],
-  },
-];
-
 export default function SetupLoan({
   setFunctions,
   formState,
@@ -78,27 +18,22 @@ export default function SetupLoan({
 }) {
   const [openMenuCurrency, setOpenMenuCurrency] = useState(false);
   const [calculatedStream, setCalculatedStream] = useState([]);
-  const { address, connector, isConnected } = useAccount();
+  const [employerAddress, setEmployerAddress] = useState("");
+  const [addressValidator, setAddressValidator] = useState(false);
+  const [noActiveStream, setNoActiveStream] = useState(false);
+  const { address } = useAccount();
 
-  // const { loading, error, data } = useQuery(GET_STREAM_DETAILS, {
-  //   variables: {
-  //     sender: senderAddress.toLocaleLowerCase(),
-  //     receiver: receiverAddress.toLocaleLowerCase(),
-  //   },
-  // });
-  const senderAddress = address;
-  const receiverAddress = "0x237CE8AbaED724970C17Afd1ff82B191CC3759Bc";
+  // sender
+  // 0x54DC214722bB592e0f46a9a4a724Eb464AeA6b62
 
-  // TYPE 0 2
-  // const senderAddress = "0x02b5525Fd3bd29dBFaE8f8e453FE3B7e85D7D470";
-  // const receiverAddress = "0x237CE8AbaED724970C17Afd1ff82B191CC3759Bc";
+  // Receiver
+  // 0xaD26A4E7ef85EDccD48451B64029B8082ffDeF18
+  // const senderAddress = "0x54DC214722bB592e0f46a9a4a724Eb464AeA6b62";
+  // const receiverAddress = "0xaD26A4E7ef85EDccD48451B64029B8082ffDeF18";
+  const senderAddress = employerAddress;
+  const receiverAddress = address;
 
-  const [getStream, { loading, data }] = useLazyQuery(GET_STREAM_DETAILS, {
-    variables: {
-      sender: senderAddress?.toLocaleLowerCase(),
-      receiver: receiverAddress.toLocaleLowerCase(),
-    },
-  });
+  const [getStream, { loading, data }] = useLazyQuery(GET_STREAM_DETAILS);
 
   function toggleMenuCurrency() {
     if (openMenuCurrency == false) {
@@ -132,33 +67,86 @@ export default function SetupLoan({
     return Math.round((number / 10 ** 18) * 60 * 60 * 24 * 30);
   };
 
+  const calculatedTotalAmount = (
+    streamedUntilUpdatedAt,
+    updatedAtTimestamp,
+    currentFlowRate
+  ) => {
+    const currentTimeInSec = Math.round(Date.now() / 1000);
+
+    const totalAmount = Math.round(
+      streamedUntilUpdatedAt +
+        (currentTimeInSec - updatedAtTimestamp) * currentFlowRate
+    );
+
+    return (totalAmount / 10 ** 18).toFixed(6);
+  };
+  const validateInputAddresses = (address) => {
+    return /^(0x){1}[0-9a-fA-F]{40}$/i.test(address);
+  };
+
+  const getData = () => {
+    const isAddressCorrect = validateInputAddresses(employerAddress);
+    if (isAddressCorrect) {
+      getStream({
+        variables: {
+          sender: senderAddress?.toLocaleLowerCase(),
+          receiver: receiverAddress?.toLocaleLowerCase(),
+        },
+        fetchPolicy: "no-cache",
+      });
+    }
+  };
+  const handleInputChange = (e) => {
+    const { value } = e.target;
+    setEmployerAddress(value);
+    const isAddressCorrect = validateInputAddresses(value);
+    if (isAddressCorrect) {
+      setAddressValidator(false);
+    } else {
+      setAddressValidator(true);
+    }
+  };
+
   useEffect(() => {
     if (data) {
       const streamsData = data.streams;
+
+      const filterStreamData = streamsData.filter(
+        (stream) => stream.currentFlowRate != 0
+      );
       const streams = [];
 
-      // streamsData for real data
-
-      streamsData.forEach((s, index) => {
-        const currentStream = {
-          stream: index + 1,
-          duration: GET_TIME(moment().unix(), s.createdAtTimestamp),
-          currentMonthlyAmount: formatMonthlyAmount(s.currentFlowRate),
-          TotalAmountReceived: "19999",
-        };
-        streams.push(currentStream);
-      });
-
-      console.log("address", address);
-      setCalculatedStream(streams);
+      if (filterStreamData.length === 0) {
+        setNoActiveStream(true);
+      } else {
+        setNoActiveStream(false);
+        filterStreamData.forEach((s, index) => {
+          const currentStream = {
+            stream: index + 1,
+            duration: GET_TIME(moment().unix(), s.createdAtTimestamp),
+            symbol: s.token.symbol,
+            currentMonthlyAmount: formatMonthlyAmount(s.currentFlowRate),
+            currentFlowRate: s.currentFlowRate,
+            totalAmountReceived: calculatedTotalAmount(
+              s.streamedUntilUpdatedAt,
+              s.updatedAtTimestamp,
+              s.currentFlowRate
+            ),
+          };
+          streams.push(currentStream);
+        });
+        setCalculatedStream(streams);
+      }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
   return (
     <div className="max-h-100">
       <h1 className="flex  mt-8 font-bold text-2xl">Setup Loan 🔧</h1>
 
-      <div className="mb-4 mt-4 flex items-center gap-5">
+      <div className="mb-2 mt-4 flex items-center gap-5">
         <div className="flex-1">
           <label
             className="block text-gray-700 text-sm font-bold mb-2"
@@ -167,49 +155,85 @@ export default function SetupLoan({
             Employer Address
           </label>
           <input
-            className=" appearance-none border-2  w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none rounded-md text-lg"
+            className={`appearance-none border-2  w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none rounded-md text-lg ${
+              addressValidator && "border-red-500"
+            }`}
             id="employer_address"
             type="text"
             placeholder="0xor...238m"
+            onChange={(e) => handleInputChange(e)}
           />
         </div>
+
         <div>
           <button
-            className="rounded-full border-2 border-black px-3 py-3 w-32	h-14	mt-7"
-            onClick={() => getStream()}
+            className="rounded-full border-2 border-black px-3 py-3 w-32	h-14	mt-7 disabled:cursor-not-allowed"
+            onClick={() => getData()}
+            disabled={addressValidator}
           >
             Search
           </button>
         </div>
       </div>
+      {addressValidator && (
+        <div className="text-red-500">Please enter valid address</div>
+      )}
       {loading ? (
         <h1>Loading...</h1>
-      ) : data?.streams[0]?.currentFlowRate == 0 ||
-        data?.streams.length === 0 ? (
+      ) : noActiveStream || data?.streams.length === 0 ? (
         <h1>No active stream with this account</h1>
       ) : (
         calculatedStream.map((stream) => {
+          const {
+            symbol,
+            duration,
+            currentMonthlyAmount,
+            totalAmountReceived,
+          } = stream;
           return (
             <div key={stream.stream}>
               <h2 className="text-xl text-gray-600">Stream {stream.stream}</h2>
               <div>
                 <span className="text-xl text-gray-600">Duration : </span>
-                <span className="text-xl font-medium">{stream.duration} </span>
+                <span className="text-xl font-medium">{duration} </span>
               </div>
-              <div>
+              <div className="flex gap-2">
                 <span className="text-xl text-gray-600">
                   Current Monthly Amount :{" "}
                 </span>
-                <span className="text-xl font-medium">
-                  {" "}
-                  {stream.currentMonthlyAmount} USDC
+                <span className="text-xl font-medium flex items-center gap-1">
+                  {symbol === "fDAIx" || symbol === "DAI" ? (
+                    <DAI width={20} />
+                  ) : symbol === "fETHx" || symbol === "ETH" ? (
+                    <ETH width={20} />
+                  ) : symbol === "fUSDCx" || symbol === "USDC" ? (
+                    <USDC width={20} />
+                  ) : symbol === "fTUSDx" || symbol === "TUSD" ? (
+                    <TUSD width={30} />
+                  ) : (
+                    <USDC width={20} />
+                  )}
+                  {currentMonthlyAmount} {symbol}
                 </span>
               </div>
-              <div>
+              <div className="flex gap-2">
                 <span className="text-xl text-gray-600">
                   Total Amount Received :{" "}
                 </span>
-                <span className="text-xl font-medium">10,000.00 USDC</span>
+                <span className="text-xl font-medium flex items-center gap-1">
+                  {symbol === "fDAIx" || symbol === "DAI" ? (
+                    <DAI width={20} />
+                  ) : symbol === "fETHx" || symbol === "ETH" ? (
+                    <ETH width={20} />
+                  ) : symbol === "fUSDCx" || symbol === "USDC" ? (
+                    <USDC width={20} />
+                  ) : symbol === "fTUSDx" || symbol === "TUSD" ? (
+                    <TUSD width={30} />
+                  ) : (
+                    <USDC width={20} />
+                  )}
+                  {totalAmountReceived} {symbol}
+                </span>
               </div>
             </div>
           );

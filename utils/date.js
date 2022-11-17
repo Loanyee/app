@@ -23,7 +23,7 @@ const GET_TIME = (timestamp1, timestamp2) => {
   const months = duration.months();
   const days = duration.days();
 
-  // if month and day availabe then return this combination
+  // if month and day available then return this combination
   let comb = `${months} ${formatText("month", months)} ${days} ${formatText(
     "day",
     days
@@ -41,5 +41,4 @@ const GET_TIME = (timestamp1, timestamp2) => {
   }
   return comb;
 };
-
 export { GET_TIME };
