@@ -66,7 +66,7 @@ export default function SetupLoan({
 
     const repayment =
       Number(formState.borrowAmount) +
-      (Number(formState.borrowAmount) * 8 * Number(formState.loanDuration)) /
+      (Number(formState.borrowAmount) * 0.08 * Number(formState.loanDuration)) /
         duration;
 
     return repayment.toFixed(2);
