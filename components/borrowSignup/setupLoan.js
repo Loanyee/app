@@ -31,7 +31,6 @@ export default function SetupLoan({
   const receiverAddress = address;
 
   const [getStream, { loading, data }] = useLazyQuery(GET_STREAM_DETAILS);
-  // let isLoanAmountExceed = false;
 
   function toggleMenuCurrency() {
     if (openMenuCurrency == false) {
@@ -66,14 +65,19 @@ export default function SetupLoan({
   };
   const getRepayment = (borrowAmount, loanDuration) => {
     const duration = formState.loanDurationType === "Month" ? 12 : 365;
+    if (calculatedStream.length) {
+      const currentSalaryHalf =
+        calculatedStream
+          .map((item) => item.currentMonthlyAmount)
+          .reduce((prev, next) => prev + next || 0) / 2;
 
-    const currentSalaryHalf = calculatedStream[0]?.currentMonthlyAmount / 2;
-    const checkAmount = borrowAmount / loanDuration;
+      const checkAmount = borrowAmount / loanDuration;
 
-    if (checkAmount > currentSalaryHalf) {
-      setIsLoanAmountExceed(true);
-    } else {
-      setIsLoanAmountExceed(false);
+      if (checkAmount > currentSalaryHalf) {
+        setIsLoanAmountExceed(true);
+      } else {
+        setIsLoanAmountExceed(false);
+      }
     }
 
     const repayment =
@@ -121,7 +125,6 @@ export default function SetupLoan({
       setIsBtnDisable(false);
       setAddressValidator(false);
     } else {
-      // setFunctions.setIsBtnDisable(true);
       setIsBtnDisable(true);
       setAddressValidator(true);
     }
@@ -135,7 +138,6 @@ export default function SetupLoan({
       const streams = [];
 
       if (filterStreamData.length === 0 || streamData.length === 0) {
-        // setFunctions.setIsBtnDisable(true);
         setNoActiveStream(true);
       } else {
         setNoActiveStream(false);
@@ -155,7 +157,6 @@ export default function SetupLoan({
           streams.push(currentStream);
         });
         setCalculatedStream(streams);
-        // setFunctions.setIsBtnDisable(false);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -172,7 +173,9 @@ export default function SetupLoan({
       if (
         formState.borrowAmount &&
         formState.loanDuration &&
-        !isLoanAmountExceed
+        streamData.length &&
+        !isLoanAmountExceed &&
+        !isBtnDisable
       ) {
         setFunctions.setIsBtnDisable(false);
       } else {
@@ -180,7 +183,8 @@ export default function SetupLoan({
       }
       getRepayment(formState.borrowAmount, formState.loanDuration);
     }
-  }, [isLoanAmountExceed]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoanAmountExceed, isBtnDisable]);
 
   return (
     <div className="max-h-100">
@@ -221,7 +225,7 @@ export default function SetupLoan({
 
         <div>
           <button
-            className="rounded-full border-2 border-black px-3 py-3 w-32	h-14	mt-7 disabled:cursor-not-allowed disabled:opacity-50"
+            className="rounded-full border-2 border-black px-3 py-3 w-32	h-14	mt-9 disabled:cursor-not-allowed disabled:opacity-50"
             onClick={() => getData()}
             disabled={isBtnDisable}
           >
@@ -481,7 +485,9 @@ export default function SetupLoan({
             <div className="flex flex-row mt-[30px] bg-slate-200 rounded-md p-3  gap-1">
               <h2 className="ml-3 text-gray-500 text-md font-normal">
                 Total repayment will be{" "}
-                <span className="text-gray-600 font-bold">${repayment}</span>
+                <span className="text-gray-600 font-bold">
+                  ${repayment.toFixed(2)}
+                </span>
               </h2>
             </div>
           )}
