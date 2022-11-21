@@ -77,7 +77,28 @@ export default function SetupLoan({
         setIsLoanAmountExceed(true);
       } else {
         setIsLoanAmountExceed(false);
+
+        if (
+          borrowAmount &&
+          loanDuration &&
+          !isBtnDisable &&
+          !isLoanAmountExceed
+        ) {
+          setFunctions.setIsBtnDisable(false);
+        }
       }
+
+      // if (
+      //   formState.borrowAmount &&
+      //   formState.loanDuration &&
+      //   streamData.length &&
+      //   !isLoanAmountExceed &&
+      //   !isBtnDisable
+      // ) {
+      //   setFunctions.setIsBtnDisable(false);
+      // } else {
+      //   setFunctions.setIsBtnDisable(true);
+      // }
     }
 
     const repayment =
@@ -170,6 +191,7 @@ export default function SetupLoan({
 
   useEffect(() => {
     if (data) {
+      getRepayment(formState.borrowAmount, formState.loanDuration);
       if (
         formState.borrowAmount &&
         formState.loanDuration &&
@@ -181,8 +203,9 @@ export default function SetupLoan({
       } else {
         setFunctions.setIsBtnDisable(true);
       }
-      getRepayment(formState.borrowAmount, formState.loanDuration);
     }
+    // console.log("useEffectCalled", isLoanAmountExceed);
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoanAmountExceed, isBtnDisable]);
 
