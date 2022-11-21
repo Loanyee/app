@@ -7,7 +7,7 @@ import USDT from "../cryptologos/usdt.js";
 import TUSD from "../cryptologos/tusd";
 import { GET_STREAM_DETAILS } from "../../queries/getStream";
 import { GET_TIME } from "../../utils/date";
-import { useLazyQuery } from "@apollo/client";
+import { from, useLazyQuery } from "@apollo/client";
 import moment from "moment/moment.js";
 import { useAccount } from "wagmi";
 export default function SetupLoan({
@@ -23,12 +23,15 @@ export default function SetupLoan({
   const [streamData, setStreamData] = useState([]);
   const [addressValidator, setAddressValidator] = useState(false);
   const [isBtnDisable, setIsBtnDisable] = useState(true);
+  const [isLoanAmountExceed, setIsLoanAmountExceed] = useState(false);
+  const [repayment, setRepayment] = useState();
   const { address } = useAccount();
 
   const senderAddress = formState.employerAddress;
   const receiverAddress = address;
 
   const [getStream, { loading, data }] = useLazyQuery(GET_STREAM_DETAILS);
+  // let isLoanAmountExceed = false;
 
   function toggleMenuCurrency() {
     if (openMenuCurrency == false) {
@@ -61,15 +64,22 @@ export default function SetupLoan({
   const formatMonthlyAmount = (number) => {
     return Math.round((number / 10 ** 18) * 60 * 60 * 24 * 30);
   };
-  const getRepayment = () => {
+  const getRepayment = (borrowAmount, loanDuration) => {
     const duration = formState.loanDurationType === "Month" ? 12 : 365;
 
-    const repayment =
-      Number(formState.borrowAmount) +
-      (Number(formState.borrowAmount) * 0.08 * Number(formState.loanDuration)) /
-        duration;
+    const currentSalaryHalf = calculatedStream[0]?.currentMonthlyAmount / 2;
+    const checkAmount = borrowAmount / loanDuration;
 
-    return repayment.toFixed(2);
+    if (checkAmount > currentSalaryHalf) {
+      setIsLoanAmountExceed(true);
+    } else {
+      setIsLoanAmountExceed(false);
+    }
+
+    const repayment =
+      Number(borrowAmount) +
+      (Number(borrowAmount) * 0.08 * Number(loanDuration)) / duration;
+    setRepayment(repayment);
   };
   const calculatedTotalAmount = (
     streamedUntilUpdatedAt,
@@ -111,7 +121,7 @@ export default function SetupLoan({
       setIsBtnDisable(false);
       setAddressValidator(false);
     } else {
-      setFunctions.setIsBtnDisable(true);
+      // setFunctions.setIsBtnDisable(true);
       setIsBtnDisable(true);
       setAddressValidator(true);
     }
@@ -125,7 +135,7 @@ export default function SetupLoan({
       const streams = [];
 
       if (filterStreamData.length === 0 || streamData.length === 0) {
-        setFunctions.setIsBtnDisable(true);
+        // setFunctions.setIsBtnDisable(true);
         setNoActiveStream(true);
       } else {
         setNoActiveStream(false);
@@ -145,7 +155,7 @@ export default function SetupLoan({
           streams.push(currentStream);
         });
         setCalculatedStream(streams);
-        setFunctions.setIsBtnDisable(false);
+        // setFunctions.setIsBtnDisable(false);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -156,6 +166,21 @@ export default function SetupLoan({
       setStreamData(data.streams);
     }
   }, [data]);
+
+  useEffect(() => {
+    if (data) {
+      if (
+        formState.borrowAmount &&
+        formState.loanDuration &&
+        !isLoanAmountExceed
+      ) {
+        setFunctions.setIsBtnDisable(false);
+      } else {
+        setFunctions.setIsBtnDisable(true);
+      }
+      getRepayment(formState.borrowAmount, formState.loanDuration);
+    }
+  }, [isLoanAmountExceed]);
 
   return (
     <div className="max-h-100">
@@ -286,9 +311,10 @@ export default function SetupLoan({
             <input
               style={{ outline: "none" }}
               value={formState.borrowAmount}
-              onChange={(event) =>
-                setFunctions.setBorrowAmount(event.target.value)
-              }
+              onChange={(event) => {
+                setFunctions.setBorrowAmount(event.target.value);
+                getRepayment(event.target.value, formState.loanDuration);
+              }}
               placeholder="0.0"
               maxLength="9"
               className="col-span-4"
@@ -367,6 +393,13 @@ export default function SetupLoan({
               )}
             </div>
           </div>
+          {isLoanAmountExceed &&
+            formState.borrowAmount &&
+            formState.loanDuration && (
+              <div className="text-red-500">
+                Loan amount exceeds 50% of your current salary
+              </div>
+            )}
         </div>
 
         <div className="flex flex-col">
@@ -378,9 +411,10 @@ export default function SetupLoan({
               style={{ outline: "none" }}
               placeholder="0"
               value={formState.loanDuration}
-              onChange={(event) =>
-                setFunctions.setLoanDuration(event.target.value)
-              }
+              onChange={(event) => {
+                setFunctions.setLoanDuration(event.target.value);
+                getRepayment(formState.borrowAmount, event.target.value);
+              }}
               className="col-span-4"
             ></input>
             {/* Toggle Menu */}
@@ -447,9 +481,7 @@ export default function SetupLoan({
             <div className="flex flex-row mt-[30px] bg-slate-200 rounded-md p-3  gap-1">
               <h2 className="ml-3 text-gray-500 text-md font-normal">
                 Total repayment will be{" "}
-                <span className="text-gray-600 font-bold">
-                  ${getRepayment()}
-                </span>
+                <span className="text-gray-600 font-bold">${repayment}</span>
               </h2>
             </div>
           )}
