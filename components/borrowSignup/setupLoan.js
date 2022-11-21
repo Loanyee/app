@@ -159,23 +159,25 @@ export default function SetupLoan({
 
   return (
     <div className="max-h-100">
+      <h1 className="flex  font-semibold text-2xl mt-[40px] ">Setup Loan 🔧</h1>
       <div className="flex flex-row mt-8 bg-slate-200 rounded-md p-3  gap-1">
         💡
         <h2 className="ml-3 text-gray-500 text-md font-normal">
           Current Interest Rate: <b>{APY * 100}%</b>
         </h2>
       </div>
-      <h1 className="flex  mt-4 font-bold text-2xl">Setup Loan 🔧</h1>
+      <h2 className="text-[#444444] text-xl font-semibold mt-[20px] mb-[20px]">
+        Salary history
+      </h2>
       <div className="flex flex-row mt-5 bg-slate-200 rounded-md p-3  gap-1">
         <h2 className="ml-3 text-gray-500 text-md font-normal">
           You need to have active stream to create a loan
         </h2>
       </div>
-      <h2 className="text-gray-500 text-lg font-bold mt-3">Salary history</h2>
       <div className="mb-2 mt-4 flex items-center gap-5">
         <div className="flex-1">
           <label
-            className="block text-gray-600 text-sm font-bold mb-2"
+            className="block text-[#444444] text-base font-semibold mb-[15px]"
             htmlFor="employer_address"
           >
             Employer Address
@@ -219,16 +221,22 @@ export default function SetupLoan({
           } = stream;
           return (
             <div key={stream.stream}>
-              <h2 className="text-xl text-gray-600">Stream {stream.stream}</h2>
+              <h2 className="text-base text-[#444444] font-semibold">
+                Stream {stream.stream}
+              </h2>
               <div>
-                <span className="text-xl text-gray-600">Duration : </span>
-                <span className="text-xl font-medium">{duration} </span>
+                <span className="text-base text-[#444444] font-semibold">
+                  Duration :{" "}
+                </span>
+                <span className="text-base font-semibold text-[#000]">
+                  {duration}{" "}
+                </span>
               </div>
               <div className="flex gap-2">
-                <span className="text-xl text-gray-600">
+                <span className="text-base text-[#444444] font-semibold">
                   Current Monthly Amount :{" "}
                 </span>
-                <span className="text-xl font-medium flex items-center gap-1">
+                <span className="text-base font-semibold text-[#000] flex items-center gap-1">
                   {symbol === "fDAIx" || symbol === "DAI" ? (
                     <DAI width={20} />
                   ) : symbol === "fETHx" || symbol === "ETH" ? (
@@ -244,10 +252,10 @@ export default function SetupLoan({
                 </span>
               </div>
               <div className="flex gap-2">
-                <span className="text-xl text-gray-600">
+                <span className="text-base text-[#444444] font-semibold">
                   Total Amount Received :{" "}
                 </span>
-                <span className="text-xl font-medium flex items-center gap-1">
+                <span className="text-base font-semibold text-[#000] flex items-center gap-1">
                   {symbol === "fDAIx" || symbol === "DAI" ? (
                     <DAI width={20} />
                   ) : symbol === "fETHx" || symbol === "ETH" ? (
@@ -266,10 +274,12 @@ export default function SetupLoan({
           );
         })
       )}
-      <h2 className="text-gray-600 text-lg font-bold mt-3">Loan Detail</h2>
-      <div className="bt-5 flex flex-col gap-5 mt-5">
-        <div className="flex flex-col gap-2">
-          <h2 className="block text-gray-600 text-sm font-bold">
+      <h2 className="text-[#444444] text-xl font-semibold mt-[30px] mb-[15px]">
+        Loan Detail
+      </h2>
+      <div className="bt-5 flex flex-col">
+        <div className="flex flex-col mb-[25px] ">
+          <h2 className="block text-[#444444] text-base font-semibold mb-[15px]">
             Borrow Amount
           </h2>
           <div className="grid grid-cols-5 border-2 px-5 rounded-md text-lg w-full p-3 border-gray-200">
@@ -359,8 +369,8 @@ export default function SetupLoan({
           </div>
         </div>
 
-        <div className="flex flex-col gap-2">
-          <h2 className="block text-gray-600 text-sm font-bold">
+        <div className="flex flex-col">
+          <h2 className="block text-[#444444] text-base font-semibold mb-[15px]">
             Loan Duration
           </h2>
           <div className="grid grid-cols-5 border-2 px-5 rounded-md text-lg w-full p-3 border-gray-200">
@@ -434,7 +444,7 @@ export default function SetupLoan({
             </div>
           </div>
           {formState.loanDuration && formState.borrowAmount && (
-            <div className="flex flex-row mt-5 bg-slate-200 rounded-md p-3  gap-1">
+            <div className="flex flex-row mt-[30px] bg-slate-200 rounded-md p-3  gap-1">
               <h2 className="ml-3 text-gray-500 text-md font-normal">
                 Total repayment will be{" "}
                 <span className="text-gray-600 font-bold">
