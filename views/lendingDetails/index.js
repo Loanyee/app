@@ -7,7 +7,7 @@ import Link from "next/link";
 import LoanHistorySection from "../../components/loanDetail/loanHistorySection";
 import { loanFactoryABI } from "../../data/contractABI/LoanFactory";
 import USDC from "../../components/cryptologos/usdc";
-export default function LoanDetails() {
+export default function LendingsDetails() {
   const router = useRouter();
   const borrowerData = router.query;
 
@@ -51,10 +51,6 @@ export default function LoanDetails() {
                   >
                     <Redirect width="1.5rem" />
                   </a>
-                </div>
-                <div className="flex items-center gap-2 mt-[10px]">
-                  <div className="w-[15px] h-[15px] bg-green-500 rounded-full "></div>
-                  <span className="font-semibold text-base">Active (60%)</span>
                 </div>
               </div>
             </div>
@@ -141,24 +137,41 @@ export default function LoanDetails() {
                 <USDC width={18} />{" "}
               </i>
             </div>
-            <div>
-              <button className="rounded-full border-2 border-black	px-5 py-2 text-lg font-semibold">
-                Repay full amount
-              </button>
+          </div>
+
+          <h1 className="font-semibold text-2xl">Borrower Detail</h1>
+          <div className="flex flex-col  gap-3 shrink bg-[#F5F9FF] rounded-md px-5 max-w-[480px]">
+            <div className="flex">
+              <div className="pb-[20px] pt-[20px]">
+                <div className="border-r border-[#E7EEF9] pr-[60px]">
+                  <span className="text-sm font-semibold text-[#767676]">
+                    Loan History
+                  </span>
+                  <div className="flex gap-2 items-center mt-[15px]">
+                    <span className="text-base font-normal">
+                      100% Repayment
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div className="pb-[20px] pt-[20px] ">
+                <div className="pl-[60px]">
+                  <span className="text-sm font-semibold text-[#767676]">
+                    Salary History
+                  </span>
+                  <div className="flex gap-2 items-center mt-[15px]">
+                    <span className="text-base font-normal">
+                      $5,000/month for 3 months
+                    </span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
           {/* Loan History */}
           <div>
             <div className="flex justify-between items-center mb-5">
-              <h1 className="font-semibold text-2xl">Detail</h1>
-              <div className="flex gap-3">
-                <button className="rounded-full border-2 border-black	px-5 py-2 text-lg font-semibold">
-                  Update
-                </button>
-                <button className="rounded-full border-2 border-black	px-5 py-2 text-lg font-semibold">
-                  Cancel
-                </button>
-              </div>
+              <h1 className="font-semibold text-2xl">Loan History</h1>
             </div>
 
             <div className="py-5 pt-2 text-stone-500 grid grid-cols-13 grid-flow-row justify-between text-xl items-center">

@@ -131,12 +131,19 @@ export default function BorrowerDetail() {
             <div>
               {lendingsData.map((borrower, index) => {
                 return (
-                  <LoanHistorySection
-                    key={4}
-                    index={index}
-                    data={borrower}
-                    myPage={true}
-                  />
+                  <Link
+                    key={index}
+                    href={{ pathname: "/lendingsDetails", query: query }}
+                  >
+                    <a>
+                      <LoanHistorySection
+                        key={4}
+                        index={index}
+                        data={borrower}
+                        myPage={true}
+                      />
+                    </a>
+                  </Link>
                 );
               })}
             </div>

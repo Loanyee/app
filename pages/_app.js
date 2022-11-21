@@ -51,7 +51,8 @@ function MyApp({ Component, pageProps }) {
       path == "/borrow" ||
       path == "/borrowerDetail" ||
       path == "/mypage" ||
-      path == "/loanDetails"
+      path == "/loanDetails" ||
+      path == "/lendingsDetails"
     ) {
       setUpdatedHeader(true);
     } else {
