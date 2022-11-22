@@ -22,6 +22,8 @@ export default function Home() {
   const [loanData, setLoanData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isNewUser, setIsNewUser] = useState(false);
+  const [difference, setDifference] = useState("");
+
   async function fetchLoans() {
     const getLoanHistory = async () => {
       const loanHistory = await axios.post(
@@ -72,6 +74,7 @@ export default function Home() {
     <div>
       <div className="container mx-auto mt-16 mb-10 bg-white rounded-md shadow-lg py-10 px-16">
         <Tabs />
+        <h1 className="font-xl">{difference} </h1>
         {/* Banner */}
         {/* <div className="container mt-12 mx-auto">
                 <Image className="w-12" src={banner}></Image>

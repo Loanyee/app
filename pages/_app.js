@@ -19,6 +19,8 @@ import { chain, configureChains, createClient, WagmiConfig } from "wagmi";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
 import dynamic from "next/dynamic";
+import { ApolloProvider } from "@apollo/client";
+import client from "../apollo-client";
 
 const { chains, provider } = configureChains(
   [chain.goerli, chain.polygonMumbai, chain.optimismGoerli],
@@ -38,8 +40,6 @@ const wagmiClient = createClient({
   provider,
 });
 
-// add bootstrap css
-
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
   const [updatedHeader, setUpdatedHeader] = useState(false);
@@ -50,7 +50,9 @@ function MyApp({ Component, pageProps }) {
       path == "/" ||
       path == "/borrow" ||
       path == "/borrowerDetail" ||
-      path == "/mypage"
+      path == "/mypage" ||
+      path == "/loanDetails" ||
+      path == "/lendingsDetails"
     ) {
       setUpdatedHeader(true);
     } else {
@@ -77,10 +79,12 @@ function MyApp({ Component, pageProps }) {
             <title>Loanyee</title>
             <link rel="icon" href="/favicon.ico" />
           </Head>
-          <Header updatedHeader={updatedHeader} />
-          <UserProvider>
-            <Component {...pageProps} />
-          </UserProvider>
+          <ApolloProvider client={client}>
+            <Header updatedHeader={updatedHeader} />
+            <UserProvider>
+              <Component {...pageProps} />
+            </UserProvider>
+          </ApolloProvider>
           <PushChat />
         </RainbowKitProvider>
       </WagmiConfig>

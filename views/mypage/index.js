@@ -3,7 +3,7 @@ import Redirect from "../../components/utilityLogos/redirect";
 import { loanData, lendingsData } from "./data";
 import { useRouter } from "next/router";
 import { useContractRead } from "wagmi";
-
+import Link from "next/link";
 import LoanHistorySection from "../../components/loanDetail/loanHistorySection";
 import { loanFactoryABI } from "../../data/contractABI/LoanFactory";
 
@@ -26,6 +26,8 @@ export default function BorrowerDetail() {
   const etherscanContractAddress =
     "https://etherscan.io/address/" + employmentLoanAddress;
 
+  const query =
+    "?id=0x4f39860610f7a55898fc31a51b81c05b5b32fdd831997613f05970833fcdab71&interestRate=8&borrowAmount=100000000000000000000&paybackMonths=1&borrower=0x02b5525fd3bd29dbfae8f8e453fe3b7e85d7d470&loanId=70";
   return (
     <div>
       {/* Header */}
@@ -96,12 +98,19 @@ export default function BorrowerDetail() {
             <div>
               {loanData.map((borrower, index) => {
                 return (
-                  <LoanHistorySection
-                    key={4}
-                    index={index}
-                    data={borrower}
-                    myPage={true}
-                  />
+                  <Link
+                    key={index}
+                    href={{ pathname: "/loanDetails", query: query }}
+                  >
+                    <a>
+                      <LoanHistorySection
+                        key={4}
+                        index={index}
+                        data={borrower}
+                        myPage={true}
+                      />
+                    </a>
+                  </Link>
                 );
               })}
             </div>
@@ -122,12 +131,19 @@ export default function BorrowerDetail() {
             <div>
               {lendingsData.map((borrower, index) => {
                 return (
-                  <LoanHistorySection
-                    key={4}
-                    index={index}
-                    data={borrower}
-                    myPage={true}
-                  />
+                  <Link
+                    key={index}
+                    href={{ pathname: "/lendingsDetails", query: query }}
+                  >
+                    <a>
+                      <LoanHistorySection
+                        key={4}
+                        index={index}
+                        data={borrower}
+                        myPage={true}
+                      />
+                    </a>
+                  </Link>
                 );
               })}
             </div>

@@ -36,12 +36,15 @@ export default function Borrow() {
 
   const [formIsEmpty, setFormIsEmpty] = useState(false);
 
+  const [noActiveStream, setNoActiveStream] = useState(false);
+  const [isBtnDisable, setIsBtnDisable] = useState(true);
   const setFunctions = {
     setCurrency: setCurrency,
     setBorrowAmount: setBorrowAmount,
     setLoanDuration: setLoanDuration,
     setLoanDurationType: setLoanDurationType,
     setEmployerAddress: setEmployerAddress,
+    setIsBtnDisable: setIsBtnDisable,
   };
 
   const formState = {
@@ -63,6 +66,8 @@ export default function Borrow() {
       formState={formState}
       APY={APY}
       creditScore={3}
+      noActiveStream={noActiveStream}
+      setNoActiveStream={setNoActiveStream}
     />,
     <EmployerApproval key={2} />,
     <Completed key={3} formState={formState} APY={APY} />,
@@ -193,7 +198,8 @@ export default function Borrow() {
             <button
               name="submitBtn"
               onClick={submitForm}
-              className="text-md hover:opacity-80  m-0 bg-stone-900 text-white w-32 py-2 px-5 rounded-full text-center"
+              className="text-md opacity-100 hover:opacity-80  m-0 bg-stone-900 text-white w-32 py-2 px-5 rounded-full text-center disabled:cursor-not-allowed disabled:opacity-80"
+              disabled={isBtnDisable}
             >
               Submit
             </button>

@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@apollo/client": "^3.7.1",
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
     "@metamask/jazzicon": "^2.0.0",
@@ -25,8 +26,10 @@
     "bootstrap": "5.2.1",
     "dotenv": "^16.0.2",
     "ethers": "^5.7.1",
+    "graphql": "^16.6.0",
     "jazzicon": "^1.5.0",
     "keccak": "^3.0.2",
+    "moment": "^2.29.4",
     "next": "12.2.5",
     "react": "18.2.0",
     "react-blockies": "^1.4.1",
