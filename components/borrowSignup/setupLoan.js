@@ -87,18 +87,6 @@ export default function SetupLoan({
           setFunctions.setIsBtnDisable(false);
         }
       }
-
-      // if (
-      //   formState.borrowAmount &&
-      //   formState.loanDuration &&
-      //   streamData.length &&
-      //   !isLoanAmountExceed &&
-      //   !isBtnDisable
-      // ) {
-      //   setFunctions.setIsBtnDisable(false);
-      // } else {
-      //   setFunctions.setIsBtnDisable(true);
-      // }
     }
 
     const repayment =
@@ -204,7 +192,6 @@ export default function SetupLoan({
         setFunctions.setIsBtnDisable(true);
       }
     }
-    // console.log("useEffectCalled", isLoanAmountExceed);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoanAmountExceed, isBtnDisable]);
@@ -212,20 +199,17 @@ export default function SetupLoan({
   return (
     <div className="max-h-100">
       <h1 className="flex  font-semibold text-2xl mt-[40px] ">Setup Loan 🔧</h1>
-      <div className="flex flex-row mt-8 bg-slate-200 rounded-md p-3  gap-1">
-        💡
+      <div className="flex flex-col mt-[20px] bg-[#f5f9ff] rounded-md p-3  gap-1">
         <h2 className="ml-3 text-gray-500 text-md font-normal">
-          Current Interest Rate: <b>{APY * 100}%</b>
+          💡 Current Interest Rate: <b>{APY * 100}%</b>
+        </h2>
+        <h2 className=" text-gray-500 text-md font-normal ml-[39px]">
+          You need to have active stream to create a loan
         </h2>
       </div>
       <h2 className="text-[#444444] text-xl font-semibold mt-[20px] mb-[20px]">
         Salary history
       </h2>
-      <div className="flex flex-row mt-5 bg-slate-200 rounded-md p-3  gap-1">
-        <h2 className="ml-3 text-gray-500 text-md font-normal">
-          You need to have active stream to create a loan
-        </h2>
-      </div>
       <div className="mb-2 mt-4 flex items-center gap-5">
         <div className="flex-1">
           <label
@@ -505,11 +489,11 @@ export default function SetupLoan({
             </div>
           </div>
           {formState.loanDuration && formState.borrowAmount && (
-            <div className="flex flex-row mt-[30px] bg-slate-200 rounded-md p-3  gap-1">
+            <div className="flex flex-row mt-[30px] bg-[#f5f9ff] rounded-md p-3  gap-1">
               <h2 className="ml-3 text-gray-500 text-md font-normal">
                 Total repayment will be{" "}
                 <span className="text-gray-600 font-bold">
-                  ${repayment.toFixed(2)}
+                  ${repayment.toFixed(2) || 0}
                 </span>
               </h2>
             </div>
