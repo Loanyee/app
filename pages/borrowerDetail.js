@@ -107,9 +107,7 @@ export default function BorrowerDetail() {
   const etherscanContractAddress =
     "https://etherscan.io/address/" + employmentLoanAddress;
 
-  function approve() {
-    approveERC20();
-  }
+
   function lend() {
     createNewLoan();
   }
@@ -123,7 +121,7 @@ export default function BorrowerDetail() {
           <div className="flex justify-between">
             <h1 className="font-semibold text-2xl">Borrower Detail</h1>
             <button
-              onClick={approve}
+              onClick={approveERC20}
               className="text-md hover:opacity-80  m-0 bg-stone-900 text-white py-2 px-5 rounded-full text-center"
             >
               Approve
@@ -186,7 +184,7 @@ export default function BorrowerDetail() {
                 <p className="text-sm text-gray-500">Return Amount</p>
                 <div className="flex gap-2">
                   <DAI width={"2rem"}></DAI>{" "}
-                  <p className="text-xl font-medium">{returnAmountInEther}</p>
+                  <p className="text-xl font-medium">{returnAmountInEther.toFixed(2)}</p>
                 </div>
               </div>
 

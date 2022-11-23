@@ -24,10 +24,10 @@ import client from "../apollo-client";
 
 const { chains, provider } = configureChains(
   [chain.goerli, chain.polygonMumbai, chain.optimismGoerli],
-  [alchemyProvider({ apiKey: process.env.ALCHEMY_ID }), publicProvider()]
+  [alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_ALCHEMY_ID })]
 );
 const { connectors } = getDefaultWallets({
-  appName: "My RainbowKit App",
+  appName: "Loanyee",
   chains,
 });
 const PushChat = dynamic(() => import("../components/chat"), {
