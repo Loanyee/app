@@ -184,7 +184,7 @@ export default function BorrowerDetail() {
                 <p className="text-sm text-gray-500">Return Amount</p>
                 <div className="flex gap-2">
                   <DAI width={"2rem"}></DAI>{" "}
-                  <p className="text-xl font-medium">{returnAmountInEther}</p>
+                  <p className="text-xl font-medium">{returnAmountInEther.toFixed(2)}</p>
                 </div>
               </div>
 

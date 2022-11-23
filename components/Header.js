@@ -44,7 +44,7 @@ const Header = ({ updatedHeader }) => {
       <div className="flex flex-row gap-3 items-center">
         {isConnected && isMypage && (
           <Link href="/mypage">
-            <a className={style.mypageBtn}>Mypage</a>
+            <a className={style.mypageBtn}>My Page</a>
           </Link>
         )}
 

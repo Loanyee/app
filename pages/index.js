@@ -104,7 +104,7 @@ export default function Home() {
           {loanData.map((borrower, index) => {
             return (
               <Link
-                key={5}
+                key={index}
                 href={{ pathname: "/borrowerDetail", query: borrower }}
               >
                 <a>

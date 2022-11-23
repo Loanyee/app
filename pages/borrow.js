@@ -199,7 +199,6 @@ export default function Borrow() {
               name="submitBtn"
               onClick={submitForm}
               className="text-md opacity-100 hover:opacity-80  m-0 bg-stone-900 text-white w-32 py-2 px-5 rounded-full text-center disabled:cursor-not-allowed disabled:opacity-80"
-              disabled={isBtnDisable}
             >
               Submit
             </button>
