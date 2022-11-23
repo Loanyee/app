@@ -131,13 +131,14 @@
 
 .header_bg::after {
   content: "";
-  position: absolute;
+  position: fixed;
   top: 0px;
   left: 0px;
+  bottom: 0px;
   background: url("../assets/header-bg.svg");
   background-size: cover;
   background-position: center center;
-  height: 300px;
+  min-height: 100%;
   width: 100%;
   z-index: -1;
 }
