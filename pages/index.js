@@ -72,7 +72,7 @@ export default function Home() {
 
   return (
     <div>
-      <div className="container mx-auto mt-16 mb-10 bg-white rounded-md shadow-lg py-10 px-16">
+      <div className="container mx-auto mt-16 mb-10 bg-white rounded-md shadow-lg py-10 md:px-16 px-6">
         <Tabs />
         <h1 className="font-xl">{difference} </h1>
         {/* Banner */}
@@ -97,31 +97,31 @@ export default function Home() {
                   <tr>
                     <th
                       scope="col"
-                      className="text-xl font-normal text-stone-500 py-5 text-left"
+                      className="md:text-xl text-base	 font-normal text-stone-500 py-5 text-left"
                     >
                       Borrower
                     </th>
                     <th
                       scope="col"
-                      className="text-xl font-normal text-stone-500 py-5 text-left"
+                      className="md:text-xl text-base font-normal text-stone-500 py-5 text-left"
                     >
                       Loan Value
                     </th>
                     <th
                       scope="col"
-                      className="text-xl font-normal text-stone-500 py-5 text-left"
+                      className="md:text-xl text-base font-normal text-stone-500 py-5 text-left"
                     >
                       Duration
                     </th>
                     <th
                       scope="col"
-                      className="text-xl font-normal text-stone-500 py-5 text-left"
+                      className="md:text-xl text-base font-normal text-stone-500 py-5 text-left"
                     >
                       Interest Rate
                     </th>
                     <th
                       scope="col"
-                      className="text-xl font-normal text-stone-500 py-5 text-left"
+                      className="md:text-xl text-base font-normal text-stone-500 py-5 text-left"
                     >
                       Status
                     </th>

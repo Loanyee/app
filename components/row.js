@@ -13,7 +13,7 @@ const Row = ({ index, data, pathname }) => {
     <tr className="hover:opacity-70 hover:cursor-pointer border-b">
       <td>
         <Link key={index} href={{ pathname: pathname, query: data }}>
-          <div className="flex gap-5 items-center  py-4 text-xl">
+          <div className="flex gap-5 items-center  py-4 md:text-xl text-base">
             <Jazzicon diameter={50} seed={jsNumberForAddress(data.borrower)} />
             {shortenAddress(data.borrower)}
           </div>
@@ -21,7 +21,7 @@ const Row = ({ index, data, pathname }) => {
       </td>
       <td>
         <Link key={index} href={{ pathname: pathname, query: data }}>
-          <div className="flex gap-2  items-center  py-4 text-xl">
+          <div className="flex gap-2  items-center  py-4 md:text-xl text-base">
             {data.currency == "USDC" && <USDC width="2rem"></USDC>}
             {data.currency == "ETH" && <ETH width="2rem"></ETH>}
             <DAI width="2rem"></DAI>
@@ -31,17 +31,19 @@ const Row = ({ index, data, pathname }) => {
       </td>
       <td>
         <Link key={index} href={{ pathname: pathname, query: data }}>
-          <div className="py-4 text-xl">{data.paybackMonths} months</div>
+          <div className="py-4 md:text-xl text-base">
+            {data.paybackMonths} months
+          </div>
         </Link>
       </td>
       <td>
         <Link key={index} href={{ pathname: pathname, query: data }}>
-          <div className=" py-4 text-xl">{data.interestRate}%</div>
+          <div className=" py-4 md:text-xl text-base">{data.interestRate}%</div>
         </Link>
       </td>
       <td>
         <Link key={index} href={{ pathname: pathname, query: data }}>
-          <div className="flex gap-2 items-center col-span-1 py-4 text-xl">
+          <div className="flex gap-2 items-center col-span-1 py-4 md:text-xl text-base">
             <div className="w-5 h-5 rounded-full bg-green-400" /> Active
             {/* {data.status == "Inactive" && <div className="w-5 h-5 rounded-full bg-red-400"/>}
            {data.status} */}
