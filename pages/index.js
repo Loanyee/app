@@ -11,7 +11,7 @@ import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../context/useContext";
 import Tabs from "../components/tabs";
 import dataSet from "../data/borrowerList";
-
+import Row from "../components/row";
 //API Calls
 const axios = require("axios");
 
@@ -89,30 +89,58 @@ export default function Home() {
       </div> */}
 
         {/* Categories */}
-        <div className="mt-10  py-5 grid grid-cols-9 justify-between text-xl text-stone-500 items-center">
-          <div className="col-span-2">Borrower</div>
-          <div className="col-span-2">Loan Value</div>
-          <div className="col-span-2">Duration</div>
-          {/* <div className="col-span-2">Credit Score</div> */}
-          {/* <div className="col-span-2">Salary History</div> */}
-          <div className="col-span-2">Interest Rate</div>
-          <div className="col-span-1">Status</div>
-        </div>
-
-        {/* Borrowers List */}
-        <div style={{ maxHeight: "67rem" }} className="container mx-auto">
-          {loanData.map((borrower, index) => {
-            return (
-              <Link
-                key={index}
-                href={{ pathname: "/borrowerDetail", query: borrower }}
-              >
-                <a>
-                  <BorrowerSection index={index} data={borrower} />
-                </a>
-              </Link>
-            );
-          })}
+        <div className="w-full overflow-auto">
+          <div style={{ minWidth: "700px", maxHeight: "600px" }}>
+            {loanData.length ? (
+              <table className="min-w-full">
+                <thead className="sticky	top-0 bg-white">
+                  <tr>
+                    <th
+                      scope="col"
+                      className="text-xl font-normal text-stone-500 py-5 text-left"
+                    >
+                      Borrower
+                    </th>
+                    <th
+                      scope="col"
+                      className="text-xl font-normal text-stone-500 py-5 text-left"
+                    >
+                      Loan Value
+                    </th>
+                    <th
+                      scope="col"
+                      className="text-xl font-normal text-stone-500 py-5 text-left"
+                    >
+                      Duration
+                    </th>
+                    <th
+                      scope="col"
+                      className="text-xl font-normal text-stone-500 py-5 text-left"
+                    >
+                      Interest Rate
+                    </th>
+                    <th
+                      scope="col"
+                      className="text-xl font-normal text-stone-500 py-5 text-left"
+                    >
+                      Status
+                    </th>
+                  </tr>
+                </thead>
+                {loanData.map((borrower, index) => {
+                  return (
+                    <Row
+                      data={borrower}
+                      key={index}
+                      pathname="/borrowerDetail"
+                    />
+                  );
+                })}
+              </table>
+            ) : (
+              <h1>Loading...</h1>
+            )}
+          </div>
         </div>
       </div>
     </div>
