@@ -52,7 +52,7 @@ export default function BorrowerDetail() {
 
   //Get loanContract Address
   const { data: employmentLoanAddress } = useContractRead({
-    addressOrName: "0xFB26b9144f13e7D2485C4df2cCbb977660DC01fc",
+    addressOrName: process.env.NEXT_PUBLIC_CONTRACT_FACTORY,
     contractInterface: loanFactoryABI,
     functionName: "idToLoan",
     args: borrowerData.loanId,
@@ -73,7 +73,7 @@ export default function BorrowerDetail() {
 
   //Get DAI Token contract for lender to call approve()
   const { config: approveERC20Config } = usePrepareContractWrite({
-    addressOrName: "0xF2d68898557cCb2Cf4C10c3Ef2B034b2a69DAD00",
+    addressOrName: process.env.NEXT_PUBLIC_BORROW_TOKEN,
     contractInterface: erc20ABI,
     functionName: "approve",
     args: [loanContractAddress, borrowAmount + 25],
