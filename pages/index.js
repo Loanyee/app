@@ -12,6 +12,9 @@ import { UserContext } from "../context/useContext";
 import Tabs from "../components/tabs";
 import dataSet from "../data/borrowerList";
 import Row from "../components/row";
+import { loanFactoryABI } from "../data/contractABI/LoanFactory";
+import { erc20ABI } from "wagmi";
+
 //API Calls
 const axios = require("axios");
 
@@ -26,10 +29,8 @@ export default function Home() {
 
   async function fetchLoans() {
     const getLoanHistory = async () => {
-      const loanHistory = await axios.post(
-        "https://api.studio.thegraph.com/query/35243/loanyee/0.3.0",
-        {
-          query: `
+      const loanHistory = await axios.post(process.env.NEXT_PUBLIC_GRAPH_KEY, {
+        query: `
                 {
                     loanHistories(first: 6, orderBy: loanId, orderDirection:desc) {
                       id
@@ -42,14 +43,11 @@ export default function Home() {
                     }
                 }
                 `,
-        }
-      );
+      });
       return loanHistory;
     };
 
-    let loanList = await fetch(
-      "https://testnet.tableland.network/query?s=SELECT%20*%20FROM%20loan_5_775"
-    );
+    let loanList = await fetch(process.env.NEXT_PUBLIC_TABLELAND_API);
     const data = await loanList.json();
     const loanDataTemp = await getLoanHistory();
     console.log(loanDataTemp);

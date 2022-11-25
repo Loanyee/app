@@ -100,7 +100,7 @@ export default function Borrow() {
 
   // const borrowAmountInWeiString = ethers.utils.formatEther(borrowAmountInWei);
   const { config } = usePrepareContractWrite({
-    addressOrName: "0xFB26b9144f13e7D2485C4df2cCbb977660DC01fc",
+    addressOrName: process.env.NEXT_PUBLIC_CONTRACT_FACTORY,
     contractInterface: loanFactoryABI,
     functionName: "createNewLoan",
     args: [
@@ -109,8 +109,8 @@ export default function Borrow() {
       loanDuration,
       employerAddress,
       userAddress,
-      "0xF2d68898557cCb2Cf4C10c3Ef2B034b2a69DAD00",
-      "0x22ff293e14F1EC3A09B137e9e06084AFd63adDF9",
+      process.env.NEXT_PUBLIC_BORROW_TOKEN,
+      process.env.NEXT_PUBLIC_SUPERFLUID_HOST,
     ],
     onSuccess(data) {
       console.log("Success", data);
@@ -211,8 +211,8 @@ export default function Borrow() {
               className="text-md flex justify-center  m-0 bg-stone-900 text-white w-32 py-2 px-5 rounded-full text-center"
             >
               <Rings
-                height="50"
-                width="50"
+                height="25"
+                width="25"
                 color="#ffffff"
                 radius="3"
                 wrapperStyle={{}}

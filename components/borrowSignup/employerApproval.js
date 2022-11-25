@@ -1,9 +1,76 @@
 import rocifi from "../../public/image/rocifi.jpeg"
 import Image from "next/image"
 
+
 import CopyButton from "../utilityLogos/copyButton"
+import { loanFactoryABI } from "../../data/contractABI/LoanFactory";
+import { useContractEvent, useSigner, useContractRead } from "wagmi";
+import { useState } from "react";
+
+
+const axios = require("axios");
+
+
 
 export default function EmployerApproval(){
+    
+    const { data: signer, isError, isLoading } = useSigner()
+  
+    const [loanId, setLoanId] = useState(0);
+
+
+    const [loanAddress, setLoanAddress] = useState("loading...")
+
+    
+    async function getLoanAddress(){
+        const userAddress = await signer.getAddress()
+        console.log("User address " , userAddress);
+        
+        const mostReccentLoan = await axios.post(
+            process.env.NEXT_PUBLIC_GRAPH_KEY,
+            {
+              query: 
+                    `{
+                        loanHistories(first: 1, orderBy: loanId, orderDirection:desc, where:{borrower: "${userAddress}"} )  {
+                          id
+                          interestRate
+                          borrowAmount
+                          interestRate
+                          paybackMonths
+                          borrower
+                          loanId
+                        }
+                    }`,
+            
+            }
+          );
+
+         setLoanId(mostReccentLoan.data.data.loanHistories[0].loanId)
+        
+    }
+
+    getLoanAddress()
+
+    console.log("loan id" , loanId);
+    const { data } = useContractRead({
+        addressOrName: process.env.NEXT_PUBLIC_CONTRACT_FACTORY,
+        contractInterface: loanFactoryABI,
+        functionName: 'idToLoan',
+        args: loanId,
+        onSuccess(data){
+            setLoanAddress(data);
+            console.log(data);
+        },
+        onError(error) {
+            console.log('Error', error)
+          },
+        onSettled(data, error) {
+        console.log('Settled', { data, error })
+        },
+    })
+    console.log("loan address" ,loanAddress);
+
+   
     return(
         <div className="flex flex-col gap-16 max-h-100">
 
@@ -34,7 +101,7 @@ export default function EmployerApproval(){
                 <div className="font-medium">loanyee.eth</div>
 
                 <CopyButton></CopyButton>
-                0xfaF70914062B12949a835837219eE526b921B7F4
+                {loanAddress}
 
 
             </div>
