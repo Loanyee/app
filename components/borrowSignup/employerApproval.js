@@ -12,7 +12,7 @@ const axios = require("axios");
 
 
 
-export default function EmployerApproval(){
+export default function EmployerApproval({setFunctions}){
     
     const { data: signer, isError, isLoading } = useSigner()
   
@@ -25,7 +25,7 @@ export default function EmployerApproval(){
     async function getLoanAddress(){
         const userAddress = await signer.getAddress()
         console.log("User address " , userAddress);
-        
+
         const mostReccentLoan = await axios.post(
             process.env.NEXT_PUBLIC_GRAPH_KEY,
             {
@@ -69,6 +69,7 @@ export default function EmployerApproval(){
         },
     })
     console.log("loan address" ,loanAddress);
+    setFunctions.setLoanContractAddress(loanAddress);
 
    
     return(

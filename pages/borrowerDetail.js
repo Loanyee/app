@@ -95,7 +95,7 @@ export default function BorrowerDetail() {
   console.log("logging error ", error);
 
   const {
-    write: createNewLoan,
+    write: lendToBorrower,
     data: lendData,
     isSuccess: lendSuccess,
   } = useContractWrite(lendToBorrowerConfig);
@@ -109,7 +109,7 @@ export default function BorrowerDetail() {
 
 
   function lend() {
-    createNewLoan();
+    lendToBorrower();
   }
 
   return (

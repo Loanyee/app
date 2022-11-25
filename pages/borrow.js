@@ -13,6 +13,7 @@ import {
   useWaitForTransaction,
 } from "wagmi";
 import Tabs from "../components/tabs";
+import { erc20ABI } from "wagmi";
 
 import { Rings } from "react-loader-spinner";
 // import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
@@ -35,6 +36,7 @@ export default function Borrow() {
   const [employerAddress, setEmployerAddress] = useState();
 
   const [formIsEmpty, setFormIsEmpty] = useState(false);
+  const [loanContractAddress, setLoanContractAddress] = useState("0x000")
 
   const [noActiveStream, setNoActiveStream] = useState(false);
   const [isBtnDisable, setIsBtnDisable] = useState(true);
@@ -45,6 +47,7 @@ export default function Borrow() {
     setLoanDurationType: setLoanDurationType,
     setEmployerAddress: setEmployerAddress,
     setIsBtnDisable: setIsBtnDisable,
+    setLoanContractAddress: setLoanContractAddress
   };
 
   const formState = {
@@ -54,6 +57,7 @@ export default function Borrow() {
     loanDurationType: loanDurationType,
     employerAddress: employerAddress,
     formIsEmpty: formIsEmpty,
+    loanContractAddress: loanContractAddress
   };
 
   const APY = 0.08;
@@ -69,7 +73,7 @@ export default function Borrow() {
       noActiveStream={noActiveStream}
       setNoActiveStream={setNoActiveStream}
     />,
-    <EmployerApproval key={2} />,
+    <EmployerApproval key={2} setFunctions={setFunctions} />,
     <Completed key={3} formState={formState} APY={APY} />,
   ];
 
@@ -99,7 +103,7 @@ export default function Borrow() {
   }
 
   // const borrowAmountInWeiString = ethers.utils.formatEther(borrowAmountInWei);
-  const { config } = usePrepareContractWrite({
+  const { config: createLoanConfig } = usePrepareContractWrite({
     addressOrName: process.env.NEXT_PUBLIC_CONTRACT_FACTORY,
     contractInterface: loanFactoryABI,
     functionName: "createNewLoan",
@@ -120,7 +124,7 @@ export default function Borrow() {
     write: createLoan,
     isSuccess,
     data: loanTxData,
-  } = useContractWrite(config);
+  } = useContractWrite(createLoanConfig);
 
   const {
     data,
@@ -131,6 +135,26 @@ export default function Borrow() {
 
   function submitForm(event) {
     createLoan();
+  }
+
+  const { config: initialFundingConfig } = usePrepareContractWrite({
+    addressOrName: process.env.NEXT_PUBLIC_BORROW_TOKEN,
+    contractInterface: erc20ABI,
+    functionName: "transfer",
+    args: [loanContractAddress, 15+"000000000000000000"],
+    onSuccess(data) {
+      console.log("Success", data);
+    },
+  });
+
+  const{
+    write: initialFunding,
+  } = useContractWrite(initialFundingConfig)
+
+  function submitInitialFunding(event){
+    initialFunding();
+    nextPage();
+
   }
 
   if (loanTxSuccess && !loanTxCompleted) {
@@ -224,7 +248,7 @@ export default function Borrow() {
 
           {currentItem == 1 && (
             <button
-              onClick={nextPage}
+              onClick={submitInitialFunding}
               className="text-md hover:opacity-80  m-0 bg-stone-900 text-white w-32 py-2 px-5 rounded-full text-center"
             >
               Continue
