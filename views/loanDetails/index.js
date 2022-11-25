@@ -7,6 +7,18 @@ import Link from "next/link";
 import LoanHistorySection from "../../components/loanDetail/loanHistorySection";
 import { loanFactoryABI } from "../../data/contractABI/LoanFactory";
 import USDC from "../../components/cryptologos/usdc";
+import Table from "../../components/Table";
+
+const columns = [
+  "Lender",
+  "Value",
+  "Maturity",
+  "Contract Address",
+  "Start Date",
+  "Interest",
+  "Status",
+];
+
 export default function LoanDetails() {
   const router = useRouter();
   const borrowerData = router.query;
@@ -29,7 +41,7 @@ export default function LoanDetails() {
   return (
     <div>
       {/* Header */}
-      <div className="mx-auto  p-8 w-10/12  mt-16 mb-10 bg-white rounded-md shadow-lg py-10 px-16 ">
+      <div className="mx-auto  p-8 w-10/12  mt-16 mb-10 bg-white rounded-md shadow-lg py-10 md:px-16 px-6 ">
         <div className="flex flex-col gap-8">
           <div className="flex justify-between">
             <h1 className="font-semibold text-2xl">Loan Detail</h1>
@@ -43,7 +55,9 @@ export default function LoanDetails() {
               />
               <div className="flex flex-col">
                 <div className="flex gap-2 items-center">
-                  <p className="text-xl font-medium">0x32j240fje2w3j3e8 </p>
+                  <p className="md:text-xl text-base font-semibold">
+                    0x32j240fje2w3j3e8{" "}
+                  </p>
                   <a
                     target="_blank"
                     rel="noreferrer"
@@ -60,7 +74,7 @@ export default function LoanDetails() {
             </div>
           </div>
           <div className="flex flex-col  gap-3 shrink bg-[#F5F9FF] rounded-md px-5 max-w-[640px]">
-            <div className="grid grid-cols-3 border-b border-[#E7EEF9]">
+            <div className="grid md:grid-cols-3 grid-cols-2 border-b border-[#E7EEF9]">
               <div className="pb-[20px] pt-[20px]">
                 <div className="border-r border-[#E7EEF9]">
                   <span className="text-base font-semibold text-[#767676]">
@@ -68,7 +82,7 @@ export default function LoanDetails() {
                   </span>
                   <div className="flex gap-2 items-center mt-[15px]">
                     <span className="text-xl font-normal">10,000 USDC</span>
-                    <i>
+                    <i className="hidden md:inline">
                       <USDC width={18} />{" "}
                     </i>
                   </div>
@@ -85,7 +99,7 @@ export default function LoanDetails() {
                 </div>
               </div>
             </div>
-            <div className="grid grid-cols-3 ">
+            <div className="grid md:grid-cols-3 grid-cols-2">
               <div className="pb-[20px] pt-[20px]">
                 <div className="border-r border-[#E7EEF9]">
                   <span className="text-base font-semibold text-[#767676]">
@@ -93,7 +107,7 @@ export default function LoanDetails() {
                   </span>
                   <div className="flex gap-2 items-center mt-[15px]">
                     <span className="text-xl font-normal">10,500 USDC</span>
-                    <i>
+                    <i className="hidden md:inline">
                       <USDC width={18} />{" "}
                     </i>
                   </div>
@@ -110,7 +124,7 @@ export default function LoanDetails() {
                 </div>
               </div>
               <div className="pb-[20px] pt-[20px]">
-                <div className="pl-[60px] ">
+                <div className="md:pl-[60px] pl-0 ">
                   <span className="text-base font-semibold text-[#767676]">
                     Contract Address
                   </span>
@@ -132,16 +146,16 @@ export default function LoanDetails() {
             </div>
           </div>
           <h1 className="font-semibold text-2xl">Repayment Status</h1>
-          <div className="flex justify-between items-center shrink bg-[#F5F9FF] rounded-md px-5 max-w-[640px] py-5">
+          <div className="flex justify-between flex-wrap items-center shrink bg-[#F5F9FF] rounded-md px-5 max-w-[640px] py-5">
             <div className="flex gap-2 items-center mt-[15px]">
-              <span className="text-xl font-normal">
+              <span className="md:text-xl text-base font-normal">
                 6,060 / 10,100 USDC (60%)
               </span>
-              <i>
+              <i className="hidden md:inline">
                 <USDC width={18} />{" "}
               </i>
             </div>
-            <div>
+            <div className="mt-5">
               <button className="rounded-full border-2 border-black	px-5 py-2 text-lg font-semibold">
                 Repay full amount
               </button>
@@ -160,32 +174,10 @@ export default function LoanDetails() {
                 </button>
               </div>
             </div>
-
-            <div className="py-5 pt-2 text-stone-500 grid grid-cols-13 grid-flow-row justify-between text-xl items-center">
-              <div className="col-span-3">Lender</div>
-              <div className="col-span-2">Value</div>
-              <div className="col-span-2">Maturity</div>
-              <div className="col-span-2">Contract Address</div>
-              <div className="col-span-2">Started Date</div>
-              <div className="col-span-1">Interest</div>
-              <div className="col-span-1">Status</div>
-            </div>
-            <div>
-              {loanData.map((borrower, index) => {
-                return (
-                  <Link
-                    key={4}
-                    href={{ pathname: "/borrowerDetail", query: borrower }}
-                  >
-                    <LoanHistorySection
-                      key={4}
-                      index={index}
-                      data={borrower}
-                      myPage={true}
-                    />
-                  </Link>
-                );
-              })}
+            <div className="w-full overflow-auto">
+              <div style={{ minWidth: "700px", maxHeight: "600px" }}>
+                <Table columns={columns} data={loanData} />
+              </div>
             </div>
           </div>
         </div>

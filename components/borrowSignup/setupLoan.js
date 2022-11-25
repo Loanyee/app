@@ -106,7 +106,7 @@ export default function SetupLoan({
         (currentTimeInSec - updatedAtTimestamp) * currentFlowRate
     );
 
-    return (totalAmount / 10 ** 18).toFixed(6);
+    return (totalAmount / 10 ** 18).toFixed(2);
   };
   const validateInputAddresses = (address) => {
     return /^(0x){1}[0-9a-fA-F]{40}$/i.test(address);
@@ -229,7 +229,7 @@ export default function SetupLoan({
 
         <div>
           <button
-            className="rounded-full border-2 border-black px-3 py-3 w-32	h-14	mt-9 disabled:cursor-not-allowed disabled:opacity-50"
+            className="rounded-full border-2 border-black px-3 sm:py-3 py-0 sm:w-32 w-26	sm:h-14 h-10	mt-9 disabled:cursor-not-allowed disabled:opacity-50"
             onClick={() => getData()}
             disabled={isBtnDisable}
           >
@@ -317,7 +317,7 @@ export default function SetupLoan({
               <h2 className="block text-[#444444] text-base font-semibold mb-[15px]">
                 Borrow Amount
               </h2>
-              <div className="grid grid-cols-5 border-2 px-5 rounded-md text-lg w-full p-3 border-gray-200">
+              <div className="flex border-2 px-5 rounded-md text-lg w-full p-3 border-gray-200">
                 <input
                   style={{ outline: "none" }}
                   value={formState.borrowAmount}
@@ -327,11 +327,11 @@ export default function SetupLoan({
                   }}
                   placeholder="0.0"
                   maxLength="9"
-                  className="col-span-4"
+                  className="flex-grow"
                 />
 
                 {/* <!-- Toggle Menu--> */}
-                <div className="relative inline-block text-left col-span-1">
+                <div className="relative  text-left w-[110px]">
                   <div>
                     <button
                       onClick={toggleMenuCurrency}

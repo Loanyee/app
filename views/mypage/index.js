@@ -6,7 +6,27 @@ import { useContractRead } from "wagmi";
 import Link from "next/link";
 import LoanHistorySection from "../../components/loanDetail/loanHistorySection";
 import { loanFactoryABI } from "../../data/contractABI/LoanFactory";
+import Row from "../../components/row";
+import Table from "../../components/Table";
 
+const columns = [
+  "Lender",
+  "Value",
+  "Maturity",
+  "Contract Address",
+  "Start Date",
+  "APR",
+  "Status",
+];
+const lendingColumns = [
+  "Lender",
+  "Value",
+  "Maturity",
+  "Credit Score",
+  "Start Date",
+  "APR",
+  "Status",
+];
 export default function BorrowerDetail() {
   const router = useRouter();
   const borrowerData = router.query;
@@ -31,13 +51,13 @@ export default function BorrowerDetail() {
   return (
     <div>
       {/* Header */}
-      <div className="mx-auto  p-8 w-10/12  mt-16 mb-10 bg-white rounded-md shadow-lg py-10 px-16 ">
+      <div className="mx-auto  p-8 w-10/12  mt-16 mb-10 bg-white rounded-md shadow-lg py-10 md:px-16 px-6  ">
         <div className="flex flex-col gap-8">
           <div className="flex justify-between">
             <h1 className="font-semibold text-2xl">My Page</h1>
           </div>
 
-          <div className="flex justify-between items-center">
+          <div className="flex gap-3 justify-between items-center flex-wrap">
             <div className="flex items-center gap-5">
               <Jazzicon
                 diameter={65}
@@ -45,7 +65,9 @@ export default function BorrowerDetail() {
               />
               <div className="flex flex-col">
                 <div className="flex gap-2 items-center">
-                  <p className="text-xl font-medium">0x32j240fje2w3j3e8 </p>
+                  <p className="md:text-xl  text-base font-medium">
+                    0x32j240fje2w3j3e8{" "}
+                  </p>
                   <a
                     target="_blank"
                     rel="noreferrer"
@@ -61,14 +83,18 @@ export default function BorrowerDetail() {
                 <div className="flex gap-10 justify-items-center items-center  ">
                   <div className="flex flex-col gap-2 self-center">
                     <h1 className="text-gray-500 font-medium	">Loan History</h1>
-                    <p className="text-lg font-semibold	">100% Repayment</p>
+                    <p className="md:text-lg text-base font-semibold	">
+                      100% Repayment
+                    </p>
                   </div>
                   <div className=" divide-x divide-solid divide-gray-900"></div>
                   <div className="flex flex-col gap-2">
                     <h1 className="text-gray-500 font-medium	">
                       Salary History
                     </h1>
-                    <p className="text-lg font-semibold	">$5,000 for 3 months</p>
+                    <p className="md:text-lg text-base font-semibold	">
+                      $5,000 for 3 months
+                    </p>
                   </div>
                 </div>
               </div>
@@ -85,67 +111,28 @@ export default function BorrowerDetail() {
                 </button>
               </div>
             </div>
-
-            <div className="py-5 pt-2 text-stone-500 grid grid-cols-13 grid-flow-row justify-between text-xl items-center">
-              <div className="col-span-3">Lender</div>
-              <div className="col-span-2">Value</div>
-              <div className="col-span-2">Maturity</div>
-              <div className="col-span-2">Contract Address</div>
-              <div className="col-span-2">Started Date</div>
-              <div className="col-span-1">Interest</div>
-              <div className="col-span-1">Status</div>
-            </div>
-            <div>
-              {loanData.map((borrower, index) => {
-                return (
-                  <Link
-                    key={index}
-                    href={{ pathname: "/loanDetails", query: query }}
-                  >
-                    <a>
-                      <LoanHistorySection
-                        key={4}
-                        index={index}
-                        data={borrower}
-                        myPage={true}
-                      />
-                    </a>
-                  </Link>
-                );
-              })}
+            <div className="w-full overflow-auto">
+              <div style={{ minWidth: "700px", maxHeight: "600px" }}>
+                <Table
+                  columns={columns}
+                  data={loanData}
+                  pathname="/loanDetails"
+                />
+              </div>
             </div>
           </div>
           <div>
             <div className="flex justify-between items-center mb-5">
               <h1 className="font-medium text-xl">Lendings</h1>
             </div>
-            <div className="py-5 pt-2 text-stone-500 grid grid-cols-13 grid-flow-row justify-between text-xl items-center">
-              <div className="col-span-3">Borrower</div>
-              <div className="col-span-2">Value</div>
-              <div className="col-span-2">Maturity</div>
-              <div className="col-span-2">Credit Score</div>
-              <div className="col-span-2">Started Date</div>
-              <div className="col-span-1">ARP</div>
-              <div className="col-span-1">Status</div>
-            </div>
-            <div>
-              {lendingsData.map((borrower, index) => {
-                return (
-                  <Link
-                    key={index}
-                    href={{ pathname: "/lendingsDetails", query: query }}
-                  >
-                    <a>
-                      <LoanHistorySection
-                        key={4}
-                        index={index}
-                        data={borrower}
-                        myPage={true}
-                      />
-                    </a>
-                  </Link>
-                );
-              })}
+            <div className="w-full overflow-auto">
+              <div style={{ minWidth: "700px", maxHeight: "600px" }}>
+                <Table
+                  columns={lendingColumns}
+                  data={lendingsData}
+                  pathname="/lendingsDetails"
+                />
+              </div>
             </div>
           </div>
         </div>
