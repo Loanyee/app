@@ -11,6 +11,7 @@ import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../context/useContext";
 import Tabs from "../components/tabs";
 import dataSet from "../data/borrowerList";
+import Row from "../components/row";
 import { loanFactoryABI } from "../data/contractABI/LoanFactory";
 import { erc20ABI } from "wagmi";
 
@@ -18,7 +19,6 @@ import { erc20ABI } from "wagmi";
 const axios = require("axios");
 
 export default function Home() {
- 
   const { user, setUser } = useContext(UserContext);
   const router = useRouter();
   const [isWalletConnected, setWalletConnected] = useState();
@@ -29,10 +29,8 @@ export default function Home() {
 
   async function fetchLoans() {
     const getLoanHistory = async () => {
-      const loanHistory = await axios.post(
-        process.env.NEXT_PUBLIC_GRAPH_KEY,
-        {
-          query: `
+      const loanHistory = await axios.post(process.env.NEXT_PUBLIC_GRAPH_KEY, {
+        query: `
                 {
                     loanHistories(first: 6, orderBy: loanId, orderDirection:desc) {
                       id
@@ -45,8 +43,7 @@ export default function Home() {
                     }
                 }
                 `,
-        }
-      );
+      });
       return loanHistory;
     };
 
@@ -73,7 +70,7 @@ export default function Home() {
 
   return (
     <div>
-      <div className="container mx-auto mt-16 mb-10 bg-white rounded-md shadow-lg py-10 px-16">
+      <div className="container mx-auto mt-16 mb-10 bg-white rounded-md shadow-lg py-10 md:px-16 px-6">
         <Tabs />
         <h1 className="font-xl">{difference} </h1>
         {/* Banner */}
@@ -90,30 +87,58 @@ export default function Home() {
       </div> */}
 
         {/* Categories */}
-        <div className="mt-10  py-5 grid grid-cols-9 justify-between text-xl text-stone-500 items-center">
-          <div className="col-span-2">Borrower</div>
-          <div className="col-span-2">Loan Value</div>
-          <div className="col-span-2">Duration</div>
-          {/* <div className="col-span-2">Credit Score</div> */}
-          {/* <div className="col-span-2">Salary History</div> */}
-          <div className="col-span-2">Interest Rate</div>
-          <div className="col-span-1">Status</div>
-        </div>
-
-        {/* Borrowers List */}
-        <div style={{ maxHeight: "67rem" }} className="container mx-auto">
-          {loanData.map((borrower, index) => {
-            return (
-              <Link
-                key={index}
-                href={{ pathname: "/borrowerDetail", query: borrower }}
-              >
-                <a>
-                  <BorrowerSection index={index} data={borrower} />
-                </a>
-              </Link>
-            );
-          })}
+        <div className="w-full overflow-auto">
+          <div style={{ minWidth: "700px", maxHeight: "600px" }}>
+            {loanData.length ? (
+              <table className="min-w-full">
+                <thead className="sticky	top-0 bg-white">
+                  <tr>
+                    <th
+                      scope="col"
+                      className="md:text-xl text-base	 font-normal text-stone-500 py-5 text-left"
+                    >
+                      Borrower
+                    </th>
+                    <th
+                      scope="col"
+                      className="md:text-xl text-base font-normal text-stone-500 py-5 text-left"
+                    >
+                      Loan Value
+                    </th>
+                    <th
+                      scope="col"
+                      className="md:text-xl text-base font-normal text-stone-500 py-5 text-left"
+                    >
+                      Duration
+                    </th>
+                    <th
+                      scope="col"
+                      className="md:text-xl text-base font-normal text-stone-500 py-5 text-left"
+                    >
+                      Interest Rate
+                    </th>
+                    <th
+                      scope="col"
+                      className="md:text-xl text-base font-normal text-stone-500 py-5 text-left"
+                    >
+                      Status
+                    </th>
+                  </tr>
+                </thead>
+                {loanData.map((borrower, index) => {
+                  return (
+                    <Row
+                      data={borrower}
+                      key={index}
+                      pathname="/borrowerDetail"
+                    />
+                  );
+                })}
+              </table>
+            ) : (
+              <h1>Loading...</h1>
+            )}
+          </div>
         </div>
       </div>
     </div>

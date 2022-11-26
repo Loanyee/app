@@ -168,22 +168,24 @@ export default function Borrow() {
 
   return (
     <>
-      <div className="container mx-auto max-w-3xl  mt-16 mb-10 bg-white rounded-md shadow-lg py-10 px-16">
+      <div className="container mx-auto max-w-3xl  mt-16 mb-10 bg-white rounded-md shadow-lg py-10 md:px-16 px-6">
         <Tabs />
-        <header className=" flex flex-row justify-center items-center text-center align-middle gap-5">
-          <div className="flex flex-row items-center gap-3">
+        <header className=" flex flex-row justify-center sm:items-center items-start text-center align-middle gap-5">
+          <div className="flex sm:flex-row flex-col items-center gap-3">
             <div className="bg-black rounded-full w-10 h-10 flex align-middle items-center justify-center">
               <p className="text-white">1</p>
             </div>
             Setup Loan
           </div>
-          <ArrowForwardIosIcon />
+          <i className="mt-[8px] sm:mt-0">
+            <ArrowForwardIosIcon />
+          </i>
           {/* "flex flex-row opacity-50 items-center gap-3" */}
           <div
             className={
               currentItem == 0
-                ? "flex flex-row opacity-50 items-center gap-3"
-                : "flex flex-row items-center gap-3"
+                ? "flex sm:flex-row flex-col opacity-50 items-center gap-3"
+                : "flex sm:flex-row flex-col items-center gap-3"
             }
           >
             <div className="bg-black rounded-full w-10 h-10 flex align-middle items-center justify-center">
@@ -191,13 +193,15 @@ export default function Borrow() {
             </div>
             Employer Approval
           </div>
-          <ArrowForwardIosIcon />
+          <i className="mt-[8px] sm:mt-0">
+            <ArrowForwardIosIcon />
+          </i>
 
           <div
             className={
               currentItem < 2
-                ? "flex flex-row opacity-50 items-center gap-3"
-                : "flex flex-row items-center gap-3"
+                ? "flex sm:flex-row flex-col  opacity-50 items-center gap-3"
+                : "flex sm:flex-row flex-col items-center gap-3"
             }
           >
             <div className="bg-black rounded-full w-10 h-10 flex align-middle items-center justify-center">
@@ -223,6 +227,7 @@ export default function Borrow() {
               name="submitBtn"
               onClick={submitForm}
               className="text-md opacity-100 hover:opacity-80  m-0 bg-stone-900 text-white w-32 py-2 px-5 rounded-full text-center disabled:cursor-not-allowed disabled:opacity-80"
+              disabled={isBtnDisable}
             >
               Submit
             </button>

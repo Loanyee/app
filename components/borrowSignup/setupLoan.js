@@ -88,18 +88,6 @@ export default function SetupLoan({
           setFunctions.setIsBtnDisable(false);
         }
       }
-
-      // if (
-      //   formState.borrowAmount &&
-      //   formState.loanDuration &&
-      //   streamData.length &&
-      //   !isLoanAmountExceed &&
-      //   !isBtnDisable
-      // ) {
-      //   setFunctions.setIsBtnDisable(false);
-      // } else {
-      //   setFunctions.setIsBtnDisable(true);
-      // }
     }
 
     const repayment =
@@ -119,7 +107,7 @@ export default function SetupLoan({
         (currentTimeInSec - updatedAtTimestamp) * currentFlowRate
     );
 
-    return (totalAmount / 10 ** 18).toFixed(6);
+    return (totalAmount / 10 ** 18).toFixed(2);
   };
   const validateInputAddresses = (address) => {
     return /^(0x){1}[0-9a-fA-F]{40}$/i.test(address);
@@ -205,7 +193,6 @@ export default function SetupLoan({
         setFunctions.setIsBtnDisable(true);
       }
     }
-    // console.log("useEffectCalled", isLoanAmountExceed);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoanAmountExceed, isBtnDisable]);
@@ -213,17 +200,11 @@ export default function SetupLoan({
   return (
     <div className="max-h-100">
       <h1 className="flex  font-semibold text-2xl mt-[40px] ">Setup Loan 🔧</h1>
-      <div className="flex flex-row mt-8 bg-slate-200 rounded-md p-3  gap-1">
-        💡
+      <div className="flex flex-col mt-[20px] bg-[#f5f9ff] rounded-md p-3  gap-1">
         <h2 className="ml-3 text-gray-500 text-md font-normal">
-          Current Interest Rate: <b>{APY * 100}%</b>
+          💡 Current Interest Rate: <b>{APY * 100}%</b>
         </h2>
-      </div>
-      <h2 className="text-[#444444] text-xl font-semibold mt-[20px] mb-[20px]">
-        Salary history
-      </h2>
-      <div className="flex flex-row mt-5 bg-slate-200 rounded-md p-3  gap-1">
-        <h2 className="ml-3 text-gray-500 text-md font-normal">
+        <h2 className=" text-gray-500 text-md font-normal ml-[39px]">
           You need to have active stream to create a loan
         </h2>
       </div>
@@ -249,7 +230,7 @@ export default function SetupLoan({
 
         <div>
           <button
-            className="rounded-full border-2 border-black px-3 py-3 w-32	h-14	mt-9 disabled:cursor-not-allowed disabled:opacity-50"
+            className="rounded-full border-2 border-black px-3 sm:py-3 py-0 sm:w-32 w-26	sm:h-14 h-10	mt-9 disabled:cursor-not-allowed disabled:opacity-50"
             onClick={() => getData()}
             disabled={isBtnDisable}
           >
@@ -327,205 +308,213 @@ export default function SetupLoan({
           );
         })
       )}
-      <h2 className="text-[#444444] text-xl font-semibold mt-[30px] mb-[15px]">
-        Loan Detail
-      </h2>
-      <div className="bt-5 flex flex-col">
-        <div className="flex flex-col mb-[25px] ">
-          <h2 className="block text-[#444444] text-base font-semibold mb-[15px]">
-            Borrow Amount
+      {!loading && !(noActiveStream || calculatedStream?.length === 0) ? (
+        <>
+          <h2 className="text-[#444444] text-xl font-semibold mt-[30px] mb-[15px]">
+            Loan Detail
           </h2>
-          <div className="grid grid-cols-5 border-2 px-5 rounded-md text-lg w-full p-3 border-gray-200">
-            <input
-              style={{ outline: "none" }}
-              value={formState.borrowAmount}
-              onChange={(event) => {
-                setFunctions.setBorrowAmount(event.target.value);
-                getRepayment(event.target.value, formState.loanDuration);
-              }}
-              placeholder="0.0"
-              maxLength="9"
-              className="col-span-4"
-            />
+          <div className="bt-5 flex flex-col">
+            <div className="flex flex-col mb-[25px] ">
+              <h2 className="block text-[#444444] text-base font-semibold mb-[15px]">
+                Borrow Amount
+              </h2>
+              <div className="flex border-2 px-5 rounded-md text-lg w-full p-3 border-gray-200">
+                <input
+                  style={{ outline: "none" }}
+                  value={formState.borrowAmount}
+                  onChange={(event) => {
+                    setFunctions.setBorrowAmount(event.target.value);
+                    getRepayment(event.target.value, formState.loanDuration);
+                  }}
+                  placeholder="0.0"
+                  maxLength="9"
+                  className="flex-grow"
+                />
 
-            {/* <!-- Toggle Menu--> */}
-            <div className="relative inline-block text-left col-span-1">
-              <div>
-                <button
-                  onClick={toggleMenuCurrency}
-                  type="button"
-                  className="inline-flex items-center gap-2 w-full  rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
-                  id="menu-button"
-                  aria-expanded="true"
-                  aria-haspopup="true"
-                >
-                  {formState.currency}{" "}
-                  {formState.currency == "USDC" && <USDC width="20px"></USDC>}{" "}
-                  {formState.currency == "USDT" && <USDT width="20px"></USDT>}{" "}
-                  {formState.currency == "DAI" && <DAI width="20px"></DAI>}
-                  <div className="absolute right-3">
-                    <svg
-                      className="h-5 w-5"
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                      aria-hidden="true"
+                {/* <!-- Toggle Menu--> */}
+                <div className="relative  text-left w-[110px]">
+                  <div>
+                    <button
+                      onClick={toggleMenuCurrency}
+                      type="button"
+                      className="inline-flex items-center gap-2 w-full  rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
+                      id="menu-button"
+                      aria-expanded="true"
+                      aria-haspopup="true"
                     >
-                      <path
-                        fillRule="evenodd"
-                        d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
+                      {formState.currency}{" "}
+                      {formState.currency == "USDC" && (
+                        <USDC width="20px"></USDC>
+                      )}{" "}
+                      {formState.currency == "USDT" && (
+                        <USDT width="20px"></USDT>
+                      )}{" "}
+                      {formState.currency == "DAI" && <DAI width="20px"></DAI>}
+                      <div className="absolute right-3">
+                        <svg
+                          className="h-5 w-5"
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                          aria-hidden="true"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                      </div>
+                    </button>
                   </div>
-                </button>
+                  {openMenuCurrency && (
+                    <div
+                      className="absolute right-0 z-10 mt-2 w-full origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                      role="menu"
+                      aria-orientation="vertical"
+                      aria-labelledby="menu-button"
+                      tabIndex="-1"
+                    >
+                      <div className="py-1" role="none">
+                        <button
+                          onClick={handleCurrency}
+                          className="flex items-center gap-2 text-gray-700 px-4 py-2 text-sm"
+                          role="menuitem"
+                          tabIndex="-1"
+                          id="USDC"
+                        >
+                          USDC <USDC width="1.5rem"></USDC>
+                        </button>
+                        <button
+                          onClick={handleCurrency}
+                          className="flex items-center gap-2 text-gray-700 px-4 py-2 text-sm"
+                          role="menuitem"
+                          tabIndex="-1"
+                          id="USDT"
+                        >
+                          USDT <USDT width="1.5rem"></USDT>{" "}
+                        </button>
+                        <button
+                          onClick={handleCurrency}
+                          className="flex items-center gap-2 text-gray-700 px-4 py-2 text-sm"
+                          role="menuitem"
+                          tabIndex="-1"
+                          id="DAI"
+                        >
+                          DAI <DAI width="1.5rem"></DAI>
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
-              {openMenuCurrency && (
-                <div
-                  className="absolute right-0 z-10 mt-2 w-full origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-                  role="menu"
-                  aria-orientation="vertical"
-                  aria-labelledby="menu-button"
-                  tabIndex="-1"
-                >
-                  <div className="py-1" role="none">
+              {isLoanAmountExceed &&
+                formState.borrowAmount &&
+                formState.loanDuration && (
+                  <div className="text-red-500">
+                    Loan amount exceeds 50% of your current salary
+                  </div>
+                )}
+            </div>
+
+            <div className="flex flex-col">
+              <h2 className="block text-[#444444] text-base font-semibold mb-[15px]">
+                Loan Duration
+              </h2>
+              <div className="grid grid-cols-5 border-2 px-5 rounded-md text-lg w-full p-3 border-gray-200">
+                <input
+                  style={{ outline: "none" }}
+                  placeholder="0"
+                  value={formState.loanDuration}
+                  onChange={(event) => {
+                    setFunctions.setLoanDuration(event.target.value);
+                    getRepayment(formState.borrowAmount, event.target.value);
+                  }}
+                  className="col-span-4"
+                ></input>
+                {/* Toggle Menu */}
+                <div className="relative inline-block text-left col-span-1">
+                  <div>
                     <button
-                      onClick={handleCurrency}
-                      className="flex items-center gap-2 text-gray-700 px-4 py-2 text-sm"
-                      role="menuitem"
-                      tabIndex="-1"
-                      id="USDC"
+                      onClick={toggleMenuDuration}
+                      type="button"
+                      className="inline-flex items-center gap-2 w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
+                      id="menu-button"
+                      aria-expanded="true"
+                      aria-haspopup="true"
                     >
-                      USDC <USDC width="1.5rem"></USDC>
-                    </button>
-                    <button
-                      onClick={handleCurrency}
-                      className="flex items-center gap-2 text-gray-700 px-4 py-2 text-sm"
-                      role="menuitem"
-                      tabIndex="-1"
-                      id="USDT"
-                    >
-                      USDT <USDT width="1.5rem"></USDT>{" "}
-                    </button>
-                    <button
-                      onClick={handleCurrency}
-                      className="flex items-center gap-2 text-gray-700 px-4 py-2 text-sm"
-                      role="menuitem"
-                      tabIndex="-1"
-                      id="DAI"
-                    >
-                      DAI <DAI width="1.5rem"></DAI>
+                      {formState.loanDurationType}
+                      <svg
+                        className="-mr-1 ml-2 h-5 w-5"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                        aria-hidden="true"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
                     </button>
                   </div>
+                  {openMenuDuration && (
+                    <div
+                      className="absolute right-0 z-10 mt-2 w-full origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                      role="menu"
+                      aria-orientation="vertical"
+                      aria-labelledby="menu-button"
+                      tabIndex="-1"
+                    >
+                      <div className="py-1" role="none">
+                        <button
+                          onClick={handleDuration}
+                          className="flex items-center gap-2 text-gray-700 px-4 py-2 text-sm"
+                          role="menuitem"
+                          tabIndex="-1"
+                          id="Day"
+                        >
+                          Day
+                        </button>
+
+                        <button
+                          onClick={handleDuration}
+                          className="flex items-center gap-2 text-gray-700 px-4 py-2 text-sm"
+                          role="menuitem"
+                          tabIndex="-1"
+                          id="Month"
+                        >
+                          Month
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+              {formState.loanDuration && formState.borrowAmount && (
+                <div className="flex flex-row mt-[30px] bg-[#f5f9ff] rounded-md p-3  gap-1">
+                  <h2 className="ml-3 text-gray-500 text-md font-normal">
+                    Total repayment will be{" "}
+                    <span className="text-gray-600 font-bold">
+                      ${repayment.toFixed(2) || 0}
+                    </span>
+                  </h2>
                 </div>
               )}
             </div>
-          </div>
-          {isLoanAmountExceed &&
-            formState.borrowAmount &&
-            formState.loanDuration && (
-              <div className="text-red-500">
-                Loan amount exceeds 50% of your current salary
+
+            {formState.formIsEmpty && (
+              <div className="flex flex-row items-center mt-5 bg-slate-200 rounded-md p-3  gap-1">
+                <div className="w-4 h-4 rounded-full bg-red-400 ml-3" />
+                <h2 className="ml-3 text-gray-500 text-md font-normal">
+                  Form Cannot Be Empty
+                </h2>
               </div>
             )}
-        </div>
-
-        <div className="flex flex-col">
-          <h2 className="block text-[#444444] text-base font-semibold mb-[15px]">
-            Loan Duration
-          </h2>
-          <div className="grid grid-cols-5 border-2 px-5 rounded-md text-lg w-full p-3 border-gray-200">
-            <input
-              style={{ outline: "none" }}
-              placeholder="0"
-              value={formState.loanDuration}
-              onChange={(event) => {
-                setFunctions.setLoanDuration(event.target.value);
-                getRepayment(formState.borrowAmount, event.target.value);
-              }}
-              className="col-span-4"
-            ></input>
-            {/* Toggle Menu */}
-            <div className="relative inline-block text-left col-span-1">
-              <div>
-                <button
-                  onClick={toggleMenuDuration}
-                  type="button"
-                  className="inline-flex items-center gap-2 w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
-                  id="menu-button"
-                  aria-expanded="true"
-                  aria-haspopup="true"
-                >
-                  {formState.loanDurationType}
-                  <svg
-                    className="-mr-1 ml-2 h-5 w-5"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                    aria-hidden="true"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </button>
-              </div>
-              {openMenuDuration && (
-                <div
-                  className="absolute right-0 z-10 mt-2 w-full origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-                  role="menu"
-                  aria-orientation="vertical"
-                  aria-labelledby="menu-button"
-                  tabIndex="-1"
-                >
-                  <div className="py-1" role="none">
-                    <button
-                      onClick={handleDuration}
-                      className="flex items-center gap-2 text-gray-700 px-4 py-2 text-sm"
-                      role="menuitem"
-                      tabIndex="-1"
-                      id="Day"
-                    >
-                      Day
-                    </button>
-
-                    <button
-                      onClick={handleDuration}
-                      className="flex items-center gap-2 text-gray-700 px-4 py-2 text-sm"
-                      role="menuitem"
-                      tabIndex="-1"
-                      id="Month"
-                    >
-                      Month
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
           </div>
-          {formState.loanDuration && formState.borrowAmount && (
-            <div className="flex flex-row mt-[30px] bg-slate-200 rounded-md p-3  gap-1">
-              <h2 className="ml-3 text-gray-500 text-md font-normal">
-                Total repayment will be{" "}
-                <span className="text-gray-600 font-bold">
-                  ${repayment.toFixed(2)}
-                </span>
-              </h2>
-            </div>
-          )}
-        </div>
-
-        {formState.formIsEmpty && (
-          <div className="flex flex-row items-center mt-5 bg-slate-200 rounded-md p-3  gap-1">
-            <div className="w-4 h-4 rounded-full bg-red-400 ml-3" />
-            <h2 className="ml-3 text-gray-500 text-md font-normal">
-              Form Cannot Be Empty
-            </h2>
-          </div>
-        )}
-      </div>
+        </>
+      ) : null}
     </div>
   );
 }
