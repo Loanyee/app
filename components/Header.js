@@ -28,7 +28,9 @@ const Header = ({ updatedHeader }) => {
     <header
       className={`flex justify-between align-middle py-6 px-8 ${
         updatedHeader ? style.header_bg : ""
-      }`}
+      }
+      ${isConnected ? "flex-wrap" : "nowrap"}
+      `}
     >
       <Link href="/">
         <div className="items-center">

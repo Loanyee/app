@@ -318,38 +318,47 @@ export default function SetupLoan({
               <h2 className="block text-[#444444] text-base font-semibold mb-[15px]">
                 Borrow Amount
               </h2>
-              <div className="flex border-2 px-5 rounded-md text-lg w-full p-3 border-gray-200">
-                <input
-                  style={{ outline: "none" }}
-                  value={formState.borrowAmount}
-                  onChange={(event) => {
-                    setFunctions.setBorrowAmount(event.target.value);
-                    getRepayment(event.target.value, formState.loanDuration);
-                  }}
-                  placeholder="0.0"
-                  maxLength="9"
-                  className="flex-grow"
-                />
+              <div className="flex border-2 relative px-2 sm:px-5  rounded-md text-lg w-full p-3 border-gray-200">
+                <div className="flex-grow">
+                  <input
+                    style={{ outline: "none" }}
+                    value={formState.borrowAmount}
+                    onChange={(event) => {
+                      setFunctions.setBorrowAmount(event.target.value);
+                      getRepayment(event.target.value, formState.loanDuration);
+                    }}
+                    placeholder="0.0"
+                    maxLength="9"
+                  />
+                </div>
 
                 {/* <!-- Toggle Menu--> */}
-                <div className="relative  text-left w-[110px]">
-                  <div>
+                <div className="relative  text-left w-[120px] ">
+                  <div className="">
                     <button
                       onClick={toggleMenuCurrency}
                       type="button"
-                      className="inline-flex items-center gap-2 w-full  rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
+                      className="inline-flex items-center gap-2 w-full  rounded-md border border-gray-300 bg-white px-2 sm:px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
                       id="menu-button"
                       aria-expanded="true"
                       aria-haspopup="true"
                     >
                       {formState.currency}{" "}
                       {formState.currency == "USDC" && (
-                        <USDC width="20px"></USDC>
+                        <i className="hidden sm:inline">
+                          <USDC width="20px"></USDC>
+                        </i>
                       )}{" "}
                       {formState.currency == "USDT" && (
-                        <USDT width="20px"></USDT>
+                        <i className="hidden sm:inline">
+                          <USDT width="20px"></USDT>
+                        </i>
                       )}{" "}
-                      {formState.currency == "DAI" && <DAI width="20px"></DAI>}
+                      {formState.currency == "DAI" && (
+                        <i className="hidden sm:inline">
+                          <DAI width="20px"></DAI>
+                        </i>
+                      )}
                       <div className="absolute right-3">
                         <svg
                           className="h-5 w-5"
@@ -421,7 +430,7 @@ export default function SetupLoan({
               <h2 className="block text-[#444444] text-base font-semibold mb-[15px]">
                 Loan Duration
               </h2>
-              <div className="grid grid-cols-5 border-2 px-5 rounded-md text-lg w-full p-3 border-gray-200">
+              <div className="flex border-2 px-2 sm:px-5 rounded-md text-lg w-full p-3 border-gray-200">
                 <input
                   style={{ outline: "none" }}
                   placeholder="0"
@@ -430,20 +439,22 @@ export default function SetupLoan({
                     setFunctions.setLoanDuration(event.target.value);
                     getRepayment(formState.borrowAmount, event.target.value);
                   }}
-                  className="col-span-4"
+                  className="flex-grow"
                 ></input>
                 {/* Toggle Menu */}
-                <div className="relative inline-block text-left col-span-1">
+                <div className="relative inline-block text-left  w-[120px]">
                   <div>
                     <button
                       onClick={toggleMenuDuration}
                       type="button"
-                      className="inline-flex items-center gap-2 w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
+                      className="inline-flex items-center gap-2 w-full  rounded-md border border-gray-300 bg-white px-2 sm:px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
                       id="menu-button"
                       aria-expanded="true"
                       aria-haspopup="true"
                     >
                       {formState.loanDurationType}
+                    </button>
+                    <div className="absolute right-3 top-[10px]">
                       <svg
                         className="-mr-1 ml-2 h-5 w-5"
                         xmlns="http://www.w3.org/2000/svg"
@@ -457,7 +468,7 @@ export default function SetupLoan({
                           clipRule="evenodd"
                         />
                       </svg>
-                    </button>
+                    </div>
                   </div>
                   {openMenuDuration && (
                     <div
